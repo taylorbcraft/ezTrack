@@ -10,4 +10,4 @@ Install the development version from GitHub using:
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/EZtrack")
+devtools::install_github("taylorbcraft/EZtrack")
