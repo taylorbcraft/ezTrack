@@ -1,6 +1,6 @@
 # ezTrack
 
-**ezTrack** is a lightweight R package for importing, cleaning, visualizing, and summarizing animal tracking data.
+**ezTrack** is a lightweight R package for quickly importing, summarizing, and mapping animal tracking data. It provides a simple, user-friendly workflow for turning raw .csv, Excel, or Movebank data into clean summaries and interactive maps in just a few lines of code.
 
 ---
 
