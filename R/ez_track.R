@@ -83,11 +83,11 @@ ez_track <- function(data,
   }
 
   if (verbose) {
-    message("Using columns:")
-    message("id_col: ", id_col)
-    message("time_col: ", time_col)
-    message("x_col: ", x_col)
-    message("y_col: ", y_col)
+    message("Columns detected:")
+    message("id: ", id_col)
+    message("time: ", time_col)
+    message("x: ", x_col)
+    message("y: ", y_col)
   }
 
   names(df)[names(df) == id_col]   <- "id"

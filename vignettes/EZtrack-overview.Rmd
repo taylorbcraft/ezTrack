@@ -67,7 +67,7 @@ messy_data <- data.frame(
 head(messy_data)
 
 manual_cleaned <- ez_track(
-  path = messy_data,
+  data = messy_data,
   id_col = "uid",
   time_col = "date_obs",
   x_col = "lon_deg",
