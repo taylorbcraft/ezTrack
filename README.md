@@ -1,6 +1,6 @@
-# EZtrack
+# ezTrack
 
-**EZtrack** is a lightweight R package for importing, cleaning, visualizing, and summarizing animal tracking data.
+**ezTrack** is a lightweight R package for importing, cleaning, visualizing, and summarizing animal tracking data.
 
 ---
 
