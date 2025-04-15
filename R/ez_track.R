@@ -3,7 +3,7 @@
 #' This function imports and standardizes tracking data into a tidy format with `id`, `timestamp`, `x`, and `y`.
 #' If requested, it converts the result to a spatial object using WGS84 (EPSG:4326).
 #'
-#' @param path Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.
+#' @param data Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.
 #' @param format Optional. File format: "csv", "xlsx". If NULL, inferred from file extension.
 #' @param tz Timezone for timestamps. Default is "UTC".
 #' @param crs EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).
@@ -15,10 +15,11 @@
 #' @param verbose Logical. If TRUE, print details during import. Default is TRUE.
 #' @param ... Additional arguments passed to the read function.
 #'
-#' @return A data.frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`, optionally with spatial geometry.
+#' @return A data.frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`, optionally with spatial geometry. Rows with missing values or duplicate (id, timestamp) combinations are automatically removed.
+
 #' @export
 
-ez_track <- function(path,
+ez_track <- function(data,
                      format = NULL,
                      tz = "UTC",
                      crs = 4326,
@@ -31,25 +32,25 @@ ez_track <- function(path,
                      ...) {
   `%||%` <- function(a, b) if (!is.null(a)) a else b
 
-  if (is.data.frame(path)) {
-    df <- path
+  if (is.data.frame(data)) {
+    df <- data
     if (verbose) message("Using data.frame input directly.")
   } else {
-    if (!file.exists(path)) stop("File does not exist: ", path)
-    if (verbose) message("Loading file: ", path)
+    if (!file.exists(data)) stop("File does not exist: ", data)
+    if (verbose) message("Loading file: ", data)
 
     if (is.null(format)) {
-      format <- tolower(tools::file_ext(path))
+      format <- tolower(tools::file_ext(data))
       if (verbose) message("Inferred format: ", format)
     }
 
     df <- switch(format,
-                 csv = read.csv(path, ...),
+                 csv = read.csv(data, ...),
                  xlsx = {
                    if (!requireNamespace("readxl", quietly = TRUE)) {
                      stop("Package 'readxl' is required for reading Excel files.")
                    }
-                   readxl::read_excel(path, ...)
+                   readxl::read_excel(data, ...)
                  },
                  stop("Unsupported format: ", format)
     )
