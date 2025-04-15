@@ -17,11 +17,11 @@ library(ezTrack)
 
 ## Introduction
 
-This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans and standardizes it, computes a summary table of the tracking data, and displays the results on an interactive map.
+This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans and standardizes it, computes a summary table of the tracking data, and plots the tracks on an interactive map.
 
 ## 1. Simulate Tracking Data with Irregular Format
 
-We simulate a small tracking dataset with non-standard column names. `ez_track()` will automatically guess which columns correspond to ID, timestamp, longitude, and latitude.
+We simulate a small tracking dataset and pass the dataset to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude..
 
 ```{r}
 set.seed(123)
@@ -41,15 +41,8 @@ sample_data <- data.frame(
 
 head(sample_data)
 
-```
-
-## 2. Import and Clean the Data
-
-We pass the dataset to ez_track() without specifying any column names. It automatically detects the appropriate columns using heuristics.
-
-```{r}
 tracks <- ez_track(
-  path = sample_data,
+  data = sample_data,
   as_sf = TRUE
 )
 
@@ -62,8 +55,6 @@ head(tracks)
 
 If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
 
-Here is an example where the column names are ambiguous and require manual input.
-
 ```{r}
 # Create intentionally confusing column names
 messy_data <- data.frame(
@@ -74,11 +65,7 @@ messy_data <- data.frame(
 )
 
 head(messy_data)
-```
-If we try to use ez_track() without specifying columns, it may not work as expected.
-Instead, we provide the correct column names manually:
-  
-```{r}
+
 manual_cleaned <- ez_track(
   path = messy_data,
   id_col = "uid",
