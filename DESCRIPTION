@@ -1,11 +1,33 @@
-Package: trackEZ
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Package: EZtrack
+Type: Package
+Title: Easy Tools for Importing, Visualizing, and Summarizing Animal Tracking Data
+Version: 0.1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person(given = "YourFirstName", 
+           family = "YourLastName", 
+           role = c("aut", "cre"), 
+           email = "your@email.com")
+Description: 
+    Provides a simple and consistent interface for working with animal tracking data. 
+    Includes functions to import and clean tracking datasets from common formats (CSV, Excel, Movebank), 
+    visualize movement tracks using interactive Leaflet maps, 
+    and compute useful summary statistics per individual. 
+    Designed for ease of use with support for spatial objects via the 'sf' package.
+License: MIT + file LICENSE
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+LazyData: true
+Depends: R (>= 3.5.0)
+Imports: 
+    leaflet,
+    sf,
+    geosphere,
+    magrittr,
+    readxl,
+    move,
+    tools,
+    htmltools
 RoxygenNote: 7.3.2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
