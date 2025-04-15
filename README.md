@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Installation
+## Installation
 
 Install the development version from GitHub using:
 
