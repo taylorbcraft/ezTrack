@@ -65,7 +65,8 @@ ez_track <- function(path,
     "animal",
     "nick_name",
     "track",
-    "trackId"
+    "trackId",
+    "name"
   )
 
   id_col <- id_col %||% {
@@ -97,6 +98,7 @@ ez_track <- function(path,
 
   n_before <- nrow(df)
   df <- df[complete.cases(df[, c("id", "timestamp", "x", "y")]), ]
+  df <- df[!duplicated(df[, c("id", "timestamp")]), ]
   n_after <- nrow(df)
 
   if (verbose && n_after < n_before) {

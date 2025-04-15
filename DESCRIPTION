@@ -1,4 +1,4 @@
-Package: EZtrack
+Package: ezTrack
 Type: Package
 Title: Easy Tools for Importing, Visualizing, and Summarizing Animal Tracking Data
 Version: 0.1.0

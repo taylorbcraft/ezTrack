@@ -19,9 +19,9 @@ ez_track(
 )
 }
 \arguments{
-\item{path}{Either a path to a tracking data file (CSV, Excel, Movebank), or a data.frame-like object.}
+\item{path}{Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.}
 
-\item{format}{Optional. File format: "csv", "xlsx", or "movebank". If NULL, inferred from file extension.}
+\item{format}{Optional. File format: "csv", "xlsx". If NULL, inferred from file extension.}
 
 \item{tz}{Timezone for timestamps. Default is "UTC".}
 

@@ -4,6 +4,3 @@ export(ez_map)
 export(ez_summary)
 export(ez_track)
 importFrom(magrittr,"%>%")
-importFrom(stats, complete.cases, median)
-importFrom(utils, read.csv)
-
