@@ -1,10 +1,10 @@
 ---
-title: "ezTrack Overview"
+title: "Getting Started with ezTrack"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ezTrack Overview}
+  %\VignetteIndexEntry{Getting Started with ezTrack}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -17,7 +17,7 @@ library(ezTrack)
 
 ## Introduction
 
-This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans and standardizes it, computes a summary table of the tracking data, and plots the tracks on an interactive map.
+This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans and standardizes it, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map.
 
 ## 1. Simulate Tracking Data with Irregular Format
 

@@ -76,12 +76,12 @@ ez_map(trk)
 ---
 
 ## Dependencies
-- `sf`
-- `leaflet`
-- `geosphere`
-- `adehabitatHR`
-- `readxl` (for Excel support)
-- `knitr`, `kableExtra`, `htmltools` (optional HTML reporting)
+- `sf` (spatial operations)
+- `leaflet` (interactive mapping)
+- `geosphere` (distance travelled calculation)
+- `adehabitatHR` (home range estimation)
+- `readxl` (Excel support)
+- `knitr`, `kableExtra`, `htmltools` (HTML reporting)
 
 Install missing packages using:
 ```r
