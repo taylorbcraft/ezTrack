@@ -1,6 +1,8 @@
 #' Interactive Map of Tracking Data
 #'
 #' Display animal tracks on an interactive Leaflet map with intuitive styling arguments.
+#' Optionally subset the data by a start and end date. Supports plotting tracks (lines and points)
+#' and home ranges (POLYGON or MULTIPOLYGON).
 #'
 #' @param data A data frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`.
 #' @param plotPath Logical, whether to draw path lines. Default is TRUE.
@@ -13,32 +15,74 @@
 #' @param pathColor CSS color string or column name to color paths. Default is "blue".
 #' @param pathWidth Line width of paths. Default is 2.
 #' @param pathOpacity Numeric (0–1), opacity of paths. Default is 1.
+#' @param homeRangeColor CSS color string or column name to color polygon geometries. Default is "blue".
 #' @param showLabels Logical, show ID + timestamp in hover labels. Default is TRUE.
+#' @param startDate Optional. A `Date` object or a date string (e.g., "2021-01-01").
+#' @param endDate Optional. A `Date` object or a date string (e.g., "2021-12-31").
 #'
 #' @return A `leaflet` map object.
 #' @export
 #' @importFrom magrittr %>%
 ez_map <- function(data,
-                       plotPath = TRUE,
-                       plotPoints = TRUE,
-                       pointRadius = 4,
-                       pointColor = "blue",
-                       pointOpacity = 0.8,
-                       pointStroke = TRUE,
-                       pointStrokeColor = "black",
-                       pathColor = "blue",
-                       pathWidth = 2,
-                       pathOpacity = 1,
-                       showLabels = TRUE) {
+                   plotPath = TRUE,
+                   plotPoints = TRUE,
+                   pointRadius = 4,
+                   pointColor = "blue",
+                   pointOpacity = 0.8,
+                   pointStroke = TRUE,
+                   pointStrokeColor = "black",
+                   pathColor = "blue",
+                   pathWidth = 2,
+                   pathOpacity = 1,
+                   homeRangeColor = "blue",
+                   showLabels = TRUE,
+                   startDate = NULL,
+                   endDate = NULL) {
 
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("The 'leaflet' package is required for map_tracks(). Please install it.")
+    stop("The 'leaflet' package is required for ez_map(). Please install it.")
   }
 
+  # Handle polygon features like home ranges
+  if (inherits(data, "sf") && all(sf::st_geometry_type(data) %in% c("POLYGON", "MULTIPOLYGON"))) {
+    poly_col <- if (is.character(homeRangeColor) && homeRangeColor %in% names(data)) {
+      pal <- leaflet::colorFactor("Set2", domain = data[[homeRangeColor]])
+      pal(data[[homeRangeColor]])
+    } else {
+      homeRangeColor
+    }
+
+    return(
+      leaflet::leaflet(data) %>%
+        leaflet::addProviderTiles("CartoDB.Positron") %>%
+        leaflet::addPolygons(
+          color = poly_col,
+          weight = 2,
+          fillOpacity = 0.4,
+          label = ~as.character(id)
+        )
+    )
+  }
+
+  # Only check these columns if it's point/line data
   if (!all(c("id", "x", "y", "timestamp") %in% names(data))) {
     stop("Input data must include columns: 'id', 'x', 'y', and 'timestamp'")
   }
 
+  # Filter by date range
+  if (!is.null(startDate)) {
+    if (inherits(startDate, "character")) startDate <- as.Date(startDate)
+    if (!inherits(startDate, "Date")) stop("startDate must be a Date or a string in YYYY-MM-DD format.")
+    data <- data[data$timestamp >= as.POSIXct(startDate), ]
+  }
+
+  if (!is.null(endDate)) {
+    if (inherits(endDate, "character")) endDate <- as.Date(endDate)
+    if (!inherits(endDate, "Date")) stop("endDate must be a Date or a string in YYYY-MM-DD format.")
+    data <- data[data$timestamp <= as.POSIXct(endDate + 1) - 1, ]  # full end day
+  }
+
+  # Initialize leaflet map
   map <- leaflet::leaflet() %>%
     leaflet::addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
     leaflet::addProviderTiles("CartoDB.Positron", group = "Light") %>%

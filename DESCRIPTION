@@ -1,33 +1,34 @@
 Package: ezTrack
 Type: Package
-Title: Easy Tools for Importing, Visualizing, and Summarizing Animal Tracking Data
+Title: Easy Tools for Exploring Animal Tracking Data
 Version: 0.1.0
 Authors@R: 
-    person(given = "YourFirstName", 
-           family = "YourLastName", 
-           role = c("aut", "cre"), 
-           email = "your@email.com")
-Description: 
-    Provides a simple and consistent interface for working with animal tracking data. 
-    Includes functions to import and clean tracking datasets from common formats (CSV, Excel, Movebank), 
-    visualize movement tracks using interactive Leaflet maps, 
-    and compute useful summary statistics per individual. 
-    Designed for ease of use with support for spatial objects via the 'sf' package.
+    person(given = "Taylor", 
+           family = "Craft", 
+           email = "taylor.b.craft2@gmail.com", 
+           role = c("aut", "cre"))
+Description: A lightweight and user-friendly toolkit for importing, cleaning, summarizing,
+    analyzing, and mapping animal tracking data. Supports raw CSV or Excel input,
+    calculates movement summaries and home ranges (MCP or KDE), and renders
+    interactive Leaflet maps.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.5.0)
-Imports: 
-    leaflet,
+RoxygenNote: 7.3.0
+Depends: R (>= 3.6.0)
+Imports:
     sf,
+    sp,
     geosphere,
+    leaflet,
+    adehabitatHR,
     magrittr,
+    htmltools,
+    utils,
+    stats
+Suggests:
     readxl,
-    move,
-    tools,
-    htmltools
-RoxygenNote: 7.3.2
-Suggests: 
     knitr,
-    rmarkdown
-VignetteBuilder: knitr
+    kableExtra
+BugReports: https://github.com/taylorbcraft/ezTrack/issues
+URL: https://github.com/taylorbcraft/ezTrack

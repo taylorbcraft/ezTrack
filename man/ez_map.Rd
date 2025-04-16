@@ -16,7 +16,10 @@ ez_map(
   pathColor = "blue",
   pathWidth = 2,
   pathOpacity = 1,
-  showLabels = TRUE
+  homeRangeColor = "blue",
+  showLabels = TRUE,
+  startDate = NULL,
+  endDate = NULL
 )
 }
 \arguments{
@@ -42,11 +45,19 @@ ez_map(
 
 \item{pathOpacity}{Numeric (0–1), opacity of paths. Default is 1.}
 
+\item{homeRangeColor}{CSS color string or column name to color polygon geometries. Default is "blue".}
+
 \item{showLabels}{Logical, show ID + timestamp in hover labels. Default is TRUE.}
+
+\item{startDate}{Optional. A `Date` object or a date string (e.g., "2021-01-01").}
+
+\item{endDate}{Optional. A `Date` object or a date string (e.g., "2021-12-31").}
 }
 \value{
 A `leaflet` map object.
 }
 \description{
 Display animal tracks on an interactive Leaflet map with intuitive styling arguments.
+Optionally subset the data by a start and end date. Supports plotting tracks (lines and points)
+and home ranges (POLYGON or MULTIPOLYGON).
 }

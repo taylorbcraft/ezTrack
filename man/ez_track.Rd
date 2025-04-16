@@ -5,7 +5,7 @@
 \title{Create a Clean Tracking Object}
 \usage{
 ez_track(
-  path,
+  data,
   format = NULL,
   tz = "UTC",
   crs = 4326,
@@ -19,7 +19,7 @@ ez_track(
 )
 }
 \arguments{
-\item{path}{Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.}
+\item{data}{Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.}
 
 \item{format}{Optional. File format: "csv", "xlsx". If NULL, inferred from file extension.}
 
@@ -42,7 +42,7 @@ ez_track(
 \item{...}{Additional arguments passed to the read function.}
 }
 \value{
-A data.frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`, optionally with spatial geometry.
+A data.frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`, optionally with spatial geometry. Rows with missing values or duplicate (id, timestamp) combinations are automatically removed.
 }
 \description{
 This function imports and standardizes tracking data into a tidy format with `id`, `timestamp`, `x`, and `y`.

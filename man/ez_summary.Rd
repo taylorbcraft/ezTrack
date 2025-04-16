@@ -4,20 +4,38 @@
 \alias{ez_summary}
 \title{Summarize Animal Tracking Data}
 \usage{
-ez_summary(data)
+ez_summary(data, startDate = NULL, endDate = NULL, report = FALSE)
 }
 \arguments{
-\item{data}{A data frame or sf object with columns id, timestamp, x, and y.}
+\item{data}{A data frame or sf object with columns `id`, `timestamp`, `x`, and `y`.}
+
+\item{startDate}{Optional. A `Date` object or string (e.g., "2021-01-01"). Filters out data before this date.}
+
+\item{endDate}{Optional. A `Date` object or string (e.g., "2021-01-15"). Filters out data after this date.}
+
+\item{report}{Logical. If TRUE, opens an HTML summary table in your browser for easy copying into slides or documents.}
 }
 \value{
-A data frame with summary statistics per `id`.
+A data frame with summary statistics per `id`, or an HTML table if `report = TRUE`.
 }
 \description{
-Calculate basic summary statistics per tracked individual.
+Calculate basic summary statistics per tracked individual. This function is useful
+for quickly understanding data coverage, gaps, and movement distance for each animal.
+The following summary statistics are returned for each unique `id`:
+- `n_fixes`: Number of location records
+- `first_location`: Timestamp of the first recorded location
+- `last_location`: Timestamp of the last recorded location
+- `tracking_duration_days`: Duration between first and last fix (in days)
+- `fixes_per_day`: Average number of fixes per day
+- `median_interval_hours`: Median interval between fixes (in hours)
+- `max_time_gap_days`: Longest time gap between consecutive fixes (in days)
+- `distance_km`: Total distance traveled (in kilometers), calculated using the Haversine formula
+- `avg_speed_kmh`: Average speed (km/h), computed as distance divided by tracking duration in hours
 }
 \examples{
 \dontrun{
-df <- import_tracking_data("...")
-summarize_tracks(df)
+df <- ez_track("tracking_data.csv")
+ez_summary(df)
+ez_summary(df, report = TRUE)
 }
 }
