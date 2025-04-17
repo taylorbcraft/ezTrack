@@ -17,7 +17,7 @@ library(ezTrack)
 
 ## Introduction
 
-This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans and standardizes it, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map.
+This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans, standardizes, and (optionally) converts it to a Spatial Feature, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map.
 
 ## 1. Simulate Tracking Data with Irregular Format
 
@@ -64,16 +64,15 @@ Summary statistics can be computed for each individual using `ez_summary()`. For
 
 The following summary statistics are returned for each unique id:
 
-- n_fixes: Number of location records  
-- first_location: Timestamp of the first recorded location  
-- last_location: Timestamp of the last recorded location  
-- tracking_duration_days: Duration between first and last fix (in days)  
-- fixes_per_day: Average number of fixes per day  
-- median_interval_hours: Median interval between fixes (in hours)  
-- max_time_gap_days: Longest time gap between consecutive fixes (in days)  
-- distance_km: Total distance traveled (in kilometers), calculated using the Haversine formula  
-- avg_speed_kmh: Average speed (km/h), computed as distance divided by tracking duration in hours  
-
+-   n_fixes: Number of location records\
+-   first_location: Timestamp of the first recorded location\
+-   last_location: Timestamp of the last recorded location\
+-   tracking_duration_days: Duration between first and last fix (in days)\
+-   fixes_per_day: Average number of fixes per day\
+-   median_interval_hours: Median interval between fixes (in hours)\
+-   max_time_gap_days: Longest time gap between consecutive fixes (in days)\
+-   distance_km: Total distance traveled (in kilometers), calculated using the Haversine formula\
+-   avg_speed_kmh: Average speed (km/h), computed as distance divided by tracking duration in hours
 
 ```{r}
 summary_table <- ez_summary(tracks)
@@ -88,8 +87,8 @@ We can display the movement tracks using an interactive Leaflet map with `ez_map
 ez_map(tracks)
 ```
 
-
 Or with additional visualization arguments.
+
 ```{r}
 ez_map(tracks, plotPath = TRUE,
   plotPoints = TRUE,
@@ -104,30 +103,31 @@ ez_map(tracks, plotPath = TRUE,
   showLabels = TRUE)
 
 ```
+
 As well as with date range filters.
+
 ```{r}
 ez_map(tracks,
   startDate = "2023-01-01",
   endDate = "2023-01-10")
 
 ```
+
 ## 4. Estimate Home Ranges
 
-You can estimate simple home ranges using Minimum Convex Polygons (MCPs) or Kernel Density Estimates (KDEs) per individual or population. This returns a spatial object with 95% Minimum Convex Polygons (MCPs) calculated for each individual or population.
-
+Individual or population-level Minimum Convex Polygons (MCP) or Kernel Density Estimate (KDE) home ranges can be created with `ez_home_range()`.
 
 ```{r}
-home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', population = TRUE)
-home_ranges_kde <- ez_home_range(tracks, method = 'kde')
+home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 50)
+home_ranges_kde <- ez_home_range(tracks, method = 'kde', level = 95)
 
 ```
 
-The result is an `sf` object containing one polygon per tracked individual or population.
+The result is an `sf` object containing one home range polygon per tracked individual or population (if `population = TRUE`).
 
-You can visualize the home ranges with `ez_map`:
+Home ranges can be vizualised with `ez_map`:
 
 ```{r}
 ez_map(home_ranges_mcp)
 ez_map(home_ranges_kde, homeRangeColor = 'id')
 ```
-
