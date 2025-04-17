@@ -131,3 +131,12 @@ Home ranges can be vizualised with `ez_map`:
 ez_map(home_ranges_mcp)
 ez_map(home_ranges_kde, homeRangeColor = 'id')
 ```
+
+
+## Developer Notes
+
+To update vignette pkgdown site:
+
+devtools::build_vignettes()
+pkgdown::build_articles()
+pkgdown::build_site()
