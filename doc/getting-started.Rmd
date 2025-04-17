@@ -1,0 +1,151 @@
+---
+title: "Getting Started with ezTrack"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with ezTrack}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(ezTrack)
+```
+
+## Introduction
+
+This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans and standardizes it, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map.
+
+## 1. Simulate Tracking Data with Irregular Format
+
+We simulate a small tracking dataset and pass the dataset to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude.
+
+```{r}
+set.seed(123)
+
+n_individuals <- 4
+n_points <- 20
+
+sample_data <- data.frame(
+  animal = rep(paste0("Animal_", LETTERS[1:n_individuals]), each = n_points),
+  date = rep(seq.POSIXt(
+    from = as.POSIXct("2023-01-01 08:00"),
+    by = "24 hours",
+    length.out = n_points), n_individuals),
+  location_long = runif(n_individuals * n_points, 5.5, 7),
+  location_lat = runif(n_individuals * n_points, 52, 53.5)
+)
+
+head(sample_data)
+
+tracks <- ez_track(
+  data = sample_data,
+  as_sf = TRUE
+)
+
+head(tracks)
+
+```
+
+
+## 2. Manually Specifying Column Names
+
+If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
+
+```{r}
+# Create intentionally confusing column names
+messy_data <- data.frame(
+  uid = rep(c("X1", "X2"), each = 4),
+  date_obs = rep(seq.POSIXt(as.POSIXct("2023-03-01 06:00"), by = "3 hours", length.out = 4), 2),
+  lon_deg = runif(8, -100, -90),
+  lat_deg = runif(8, 40, 45)
+)
+
+head(messy_data)
+
+manual_cleaned <- ez_track(
+  data = messy_data,
+  id_col = "uid",
+  time_col = "date_obs",
+  x_col = "lon_deg",
+  y_col = "lat_deg"
+)
+
+head(manual_cleaned)
+```
+## 3. Summarize the Tracking Data
+
+Summary statistics can be computed for each individual using `ez_summary()`. For easy use in reports or presentations, HTML reports can be generated using `report = TRUE`. Summaries can also be filtered by date using the `startDate` and `endDate` arguments.
+
+The following summary statistics are returned for each unique id:
+
+- n_fixes: Number of location records  
+- first_location: Timestamp of the first recorded location  
+- last_location: Timestamp of the last recorded location  
+- tracking_duration_days: Duration between first and last fix (in days)  
+- fixes_per_day: Average number of fixes per day  
+- median_interval_hours: Median interval between fixes (in hours)  
+- max_time_gap_days: Longest time gap between consecutive fixes (in days)  
+- distance_km: Total distance traveled (in kilometers), calculated using the Haversine formula  
+- avg_speed_kmh: Average speed (km/h), computed as distance divided by tracking duration in hours  
+
+
+```{r}
+summary_table <- ez_summary(tracks)
+summary_table
+```
+
+## 4. Visualize the Tracks on an Interactive Map
+
+We can display the movement tracks using an interactive Leaflet map with `ez_map()` with a simple command.
+
+```{r}
+ez_map(tracks)
+```
+
+
+Or with additional visualization arguments.
+```{r}
+ez_map(tracks, plotPath = TRUE,
+  plotPoints = TRUE,
+  pointRadius = 2,
+  pointColor = "id",
+  pointOpacity = 1,
+  pointStroke = TRUE,
+  pointStrokeColor = "black",
+  pathColor = "id",
+  pathWidth = 2,
+  pathOpacity = 0.5,
+  showLabels = TRUE)
+
+```
+As well as with date range filters.
+```{r}
+ez_map(tracks,
+  startDate = "2023-01-01",
+  endDate = "2023-01-10")
+
+```
+## 5. Estimate Home Ranges
+
+You can estimate simple home ranges using Minimum Convex Polygons (MCPs) or Kernel Density Estimates (KDEs) per individual or population. This returns a spatial object with 95% Minimum Convex Polygons (MCPs) calculated for each individual or population.
+
+
+```{r}
+home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', population = TRUE)
+home_ranges_kde <- ez_home_range(tracks, method = 'kde')
+
+```
+
+The result is an `sf` object containing one polygon per tracked individual or population.
+
+You can visualize the home ranges with `ez_map`:
+
+```{r}
+ez_map(home_ranges_mcp)
+ez_map(home_ranges_kde, homeRangeColor = 'id')
+```
+
