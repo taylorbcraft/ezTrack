@@ -19,9 +19,9 @@ ez_track(
 )
 }
 \arguments{
-\item{data}{Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.}
+\item{data}{A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or a path to CSV, XLSX, SHP, GPKG, or GeoJSON.}
 
-\item{format}{Optional. File format: "csv", "xlsx". If NULL, inferred from file extension.}
+\item{format}{Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg", "geojson".}
 
 \item{tz}{Timezone for timestamps. Default is "UTC".}
 
@@ -42,9 +42,10 @@ ez_track(
 \item{...}{Additional arguments passed to the read function.}
 }
 \value{
-A data.frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`, optionally with spatial geometry. Rows with missing values or duplicate (id, timestamp) combinations are automatically removed.
+A data.frame or `sf` object with standardized columns `id`, `timestamp`, `x`, and `y`. Missing values and duplicate (id, timestamp) rows are removed.
 }
 \description{
-This function imports and standardizes tracking data into a tidy format with `id`, `timestamp`, `x`, and `y`.
-If requested, it converts the result to a spatial object using WGS84 (EPSG:4326).
+This function imports and standardizes tracking data into a tidy format with columns: `id`, `timestamp`, `x`, and `y`.
+It supports common input formats including data frames, `sf` and `Spatial` objects, or file paths to CSV, Excel, Shapefiles, GeoPackages, and GeoJSON.
+Optionally returns a spatial object projected to WGS84 (EPSG:4326).
 }

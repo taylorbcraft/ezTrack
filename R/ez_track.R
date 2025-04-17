@@ -1,10 +1,11 @@
 #' Create a Clean Tracking Object
 #'
-#' This function imports and standardizes tracking data into a tidy format with `id`, `timestamp`, `x`, and `y`.
-#' If requested, it converts the result to a spatial object using WGS84 (EPSG:4326).
+#' This function imports and standardizes tracking data into a tidy format with columns: `id`, `timestamp`, `x`, and `y`.
+#' It supports common input formats including data frames, `sf` and `Spatial` objects, or file paths to CSV, Excel, Shapefiles, GeoPackages, and GeoJSON.
+#' Optionally returns a spatial object projected to WGS84 (EPSG:4326).
 #'
-#' @param data Either a path to a tracking data file (CSV, Excel), or a data.frame-like object.
-#' @param format Optional. File format: "csv", "xlsx". If NULL, inferred from file extension.
+#' @param data A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or a path to CSV, XLSX, SHP, GPKG, or GeoJSON.
+#' @param format Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg", "geojson".
 #' @param tz Timezone for timestamps. Default is "UTC".
 #' @param crs EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).
 #' @param as_sf Logical. Should the result be returned as an `sf` object? Default is TRUE.
@@ -15,8 +16,7 @@
 #' @param verbose Logical. If TRUE, print details during import. Default is TRUE.
 #' @param ... Additional arguments passed to the read function.
 #'
-#' @return A data.frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`, optionally with spatial geometry. Rows with missing values or duplicate (id, timestamp) combinations are automatically removed.
-
+#' @return A data.frame or `sf` object with standardized columns `id`, `timestamp`, `x`, and `y`. Missing values and duplicate (id, timestamp) rows are removed.
 #' @export
 
 ez_track <- function(data,
@@ -32,51 +32,65 @@ ez_track <- function(data,
                      ...) {
   `%||%` <- function(a, b) if (!is.null(a)) a else b
 
-  if (is.data.frame(data)) {
-    df <- data
-    if (verbose) message("Using data.frame input directly.")
-  } else {
-    if (!file.exists(data)) stop("File does not exist: ", data)
-    if (verbose) message("Loading file: ", data)
-
-    if (is.null(format)) {
-      format <- tolower(tools::file_ext(data))
-      if (verbose) message("Inferred format: ", format)
+  load_tracking_data <- function(data, format = NULL, ..., verbose = TRUE) {
+    if (inherits(data, "sf")) {
+      if (verbose) message("Handling input as sf object.")
+      coords <- sf::st_coordinates(data)
+      df <- cbind(sf::st_drop_geometry(data), coords)
+      names(df)[(ncol(df)-1):ncol(df)] <- c("x", "y")
+      return(df)
     }
 
-    df <- switch(format,
-                 csv = read.csv(data, ...),
-                 xlsx = {
-                   if (!requireNamespace("readxl", quietly = TRUE)) {
-                     stop("Package 'readxl' is required for reading Excel files.")
-                   }
-                   readxl::read_excel(data, ...)
-                 },
-                 stop("Unsupported format: ", format)
-    )
+    if (inherits(data, "Spatial")) {
+      if (verbose) message("Handling input as Spatial object.")
+      df <- as.data.frame(data)
+      coords <- sp::coordinates(data)
+      df$x <- coords[, 1]
+      df$y <- coords[, 2]
+      return(df)
+    }
+
+    if (is.character(data)) {
+      if (!file.exists(data)) stop("File does not exist: ", data)
+      if (is.null(format)) format <- tolower(tools::file_ext(data))
+      if (verbose) message("Detected file format: ", format)
+
+      if (format %in% c("shp", "gpkg", "geojson", "json", "kml")) {
+        if (!requireNamespace("sf", quietly = TRUE)) stop("Please install the 'sf' package.")
+        return(sf::st_read(data, quiet = !verbose, ...))
+      }
+
+      if (format == "csv") return(read.csv(data, ...))
+      if (format == "xlsx") {
+        if (!requireNamespace("readxl", quietly = TRUE)) stop("Please install the 'readxl' package.")
+        return(readxl::read_excel(data, ...))
+      }
+
+      stop("Unsupported file format: ", format)
+    }
+
+    if (is.data.frame(data)) {
+      if (verbose) message("Using data.frame input directly.")
+      return(data)
+    }
+
+    stop("Unsupported data type: ", class(data))
   }
 
-  # Clean and standardize column names
+  df <- load_tracking_data(data, format = format, ..., verbose = verbose)
+
+  # Standardize column names
   names(df) <- tolower(gsub("\\s+", "_", names(df)))
 
-  patterns <- c(
-    "^id$",
-    "^individual\\.local\\.identifier$",
-    "^local\\.identifier$",
-    "animal",
-    "nick_name",
-    "track",
-    "trackId",
-    "name"
-  )
-
   id_col <- id_col %||% {
+    patterns <- c("^id$", "individual.*identifier", "animal", "track", "trackid", "nick_name", "name")
     matches <- unlist(lapply(patterns, function(p) grep(p, names(df), value = TRUE)))
     matches[1]
   }
-  time_col <- time_col %||% grep("timestamp|time|date|datetime", names(df), value = TRUE)[1]
-  x_col    <- x_col    %||% grep("lon|x|longitude|location_lon|location.long", names(df), value = TRUE)[1]
-  y_col    <- y_col    %||% grep("lat|y|latitude|location_lat|location.lat", names(df), value = TRUE)[1]
+
+  time_col <- time_col %||% grep("timestamp|date|time|datetime", names(df), value = TRUE)[1]
+  x_col    <- x_col    %||% grep("lon|x|longitude", names(df), value = TRUE)[1]
+  y_col    <- y_col    %||% grep("lat|y|latitude", names(df), value = TRUE)[1]
 
   if (!all(c(id_col, time_col, x_col, y_col) %in% names(df))) {
     stop("Could not identify required columns: id, timestamp, x, and y.")
@@ -95,7 +109,7 @@ ez_track <- function(data,
   names(df)[names(df) == x_col]    <- "x"
   names(df)[names(df) == y_col]    <- "y"
 
-  df$timestamp <- as.POSIXct(df$timestamp, format = "%Y-%m-%d %H:%M:%S", tz = tz)
+  df$timestamp <- as.POSIXct(df$timestamp, tz = tz)
 
   n_before <- nrow(df)
   df <- df[complete.cases(df[, c("id", "timestamp", "x", "y")]), ]
@@ -107,10 +121,7 @@ ez_track <- function(data,
   }
 
   if (as_sf) {
-    if (!requireNamespace("sf", quietly = TRUE)) {
-      stop("The 'sf' package is required to return spatial objects.")
-    }
-
+    if (!requireNamespace("sf", quietly = TRUE)) stop("Please install the 'sf' package.")
     sf_obj <- sf::st_as_sf(df, coords = c("x", "y"), crs = crs, remove = FALSE)
 
     if (!is.na(sf::st_crs(sf_obj)$epsg) && sf::st_crs(sf_obj)$epsg != 4326) {

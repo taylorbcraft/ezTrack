@@ -23,8 +23,10 @@ devtools::install_github("taylorbcraft/ezTrack")
 clean_data <- ez_track("my_tracking_file.csv")
 ```
 - Auto-detects columns for `id`, `timestamp`, `x`, and `y`
-- Handles CSV and Excel files
-- Returns a clean data frame or `sf` object
+- Supports CSV, Excel, shapefiles (.shp), GeoPackages (.gpkg), and GeoJSON files
+- Also accepts data.frame, sf, and Spatial* objects
+- Removes rows with missing or duplicate (id, timestamp) combinations
+- Returns a clean data frame or (optionally) a `sf` object projected to WGS84
 
 ---
 
