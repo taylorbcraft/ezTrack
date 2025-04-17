@@ -2,5 +2,5 @@ pandoc: '3.2'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  getting-started-eztrack: getting-started-eztrack.html
-last_built: 2025-04-17T08:19Z
+  getting-started: getting-started.html
+last_built: 2025-04-17T08:28Z
