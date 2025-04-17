@@ -2,7 +2,7 @@
 
 **ezTrack** is a lightweight R package for quickly importing, summarizing, visualizing, and analyzing animal tracking data. It provides a simple workflow to go from raw GPS data to interactive maps and home range estimates with just a few lines of code.
 
-[View the vignette](https://taylorbcraft.github.io/ezTrack/getting-started-with-eztrack.html)
+[View the vignette](https://taylorbcraft.github.io/ezTrack/getting-started.html)
 ---
 
 
