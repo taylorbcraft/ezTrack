@@ -4,6 +4,8 @@
 
 ---
 
+[View the vignette](https://taylorbcraft.github.io/ezTrack/getting-started-with-eztrack.html)
+
 
 ## Installation
 
