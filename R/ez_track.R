@@ -70,7 +70,6 @@ ez_track <- function(data,
     }
 
     if (is.data.frame(data)) {
-      if (verbose) message("Using data.frame input directly.")
       return(data)
     }
 
