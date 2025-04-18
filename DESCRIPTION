@@ -25,7 +25,8 @@ Imports:
     magrittr,
     htmltools,
     utils,
-    stats
+    stats,
+    gpplot2
 VignetteBuilder: knitr
 Suggests:
     knitr,

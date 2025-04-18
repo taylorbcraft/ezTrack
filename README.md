@@ -87,6 +87,7 @@ ez_map(trk)
 - `adehabitatHR` (home range estimation)
 - `readxl` (Excel support)
 - `knitr`, `kableExtra`, `htmltools` (HTML reporting)
+- `ggplot2` (latitude plotting)
 
 Install missing packages using:
 ```r
