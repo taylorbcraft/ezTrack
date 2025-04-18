@@ -29,21 +29,7 @@ We simulate a small tracking dataset and pass the dataset to `ez_track()`. If co
 If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
 
 ```{r}
-set.seed(123)
-
-n_individuals <- 4
-n_points <- 20
-
-sample_data <- data.frame(
-  animal = rep(paste0("Animal_", LETTERS[1:n_individuals]), each = n_points),
-  date = rep(seq.POSIXt(
-    from = as.POSIXct("2023-01-01 08:00"),
-    by = "36 hours",
-    length.out = n_points), n_individuals),
-  location_long = runif(n_individuals * n_points, 5.5, 7),
-  location_lat = runif(n_individuals * n_points, 52, 53.5)
-)
-
+data("sample_data")
 head(sample_data)
 
 tracks <- ez_track(
