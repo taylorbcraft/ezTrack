@@ -1,22 +1,17 @@
 #' Plot Latitude Over Time
 #'
-#' Creates a time series plot of latitude (y-axis) over timestamp (x-axis),
-#' with separate lines for each individual animal. Optionally facets the plot by animal
-#' and allows customization of x-axis date format and break spacing.
+#' Creates a time series plot of latitude (y-axis) over timestamp (x-axis), with separate lines for each individual animal. Optionally facets the plot by animal and allows customization of x-axis date format and break spacing.
 #'
 #' @param data A data frame or `sf` object with columns `id`, `timestamp`, and `y` (latitude).
 #' @param color_palette Character. Viridis palette option: "viridis", "magma", "plasma", "inferno", "cividis", or "turbo". Default is "turbo".
-#' @param facet Logical. If TRUE, creates a separate facet panel for each animal and removes the legend. Default is FALSE.
-#' @param date_format Optional. Format for date labels on the x-axis (e.g., "\\%b \\%d", "\\%Y-\\%m", "\\%H:\\%M"). Default is automatic.
+#' @param facet Logical. If TRUE, creates a separate facet panel for each animal. Default is FALSE.
+#' @param date_format Optional. Format for date labels on the x-axis (e.g., "\%b \%d", "\%Y-\%m", "\%H:\%M"). Default is automatic.
 #' @param date_breaks Optional. Interval for x-axis breaks (e.g., "1 day", "2 weeks"). Default is automatic.
 #' @param startDate Optional. A `Date` object or string (e.g., "2023-01-01"). Filters out data before this date.
 #' @param endDate Optional. A `Date` object or string (e.g., "2023-02-01"). Filters out data after this date.
 #'
 #' @return A ggplot object.
 #' @export
-#'
-#' @examples
-#' ez_latitude_plot(tracking_data, facet = TRUE, date_format = "%b %d", date_breaks = "1 week", startDate = "2023-05-01")
 ez_latitude_plot <- function(data,
                              color_palette = "turbo",
                              facet = FALSE,

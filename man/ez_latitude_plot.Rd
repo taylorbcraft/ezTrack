@@ -19,9 +19,9 @@ ez_latitude_plot(
 
 \item{color_palette}{Character. Viridis palette option: "viridis", "magma", "plasma", "inferno", "cividis", or "turbo". Default is "turbo".}
 
-\item{facet}{Logical. If TRUE, creates a separate facet panel for each animal and removes the legend. Default is FALSE.}
+\item{facet}{Logical. If TRUE, creates a separate facet panel for each animal. Default is FALSE.}
 
-\item{date_format}{Optional. Format for date labels on the x-axis (e.g., "\\%b \\%d", "\\%Y-\\%m", "\\%H:\\%M"). Default is automatic.}
+\item{date_format}{Optional. Format for date labels on the x-axis (e.g., "\%b \%d", "\%Y-\%m", "\%H:\%M"). Default is automatic.}
 
 \item{date_breaks}{Optional. Interval for x-axis breaks (e.g., "1 day", "2 weeks"). Default is automatic.}
 
@@ -33,10 +33,5 @@ ez_latitude_plot(
 A ggplot object.
 }
 \description{
-Creates a time series plot of latitude (y-axis) over timestamp (x-axis),
-with separate lines for each individual animal. Optionally facets the plot by animal
-and allows customization of x-axis date format and break spacing.
-}
-\examples{
-ez_latitude_plot(tracking_data, facet = TRUE, date_format = "\%b \%d", date_breaks = "1 week", startDate = "2023-05-01")
+Creates a time series plot of latitude (y-axis) over timestamp (x-axis), with separate lines for each individual animal. Optionally facets the plot by animal and allows customization of x-axis date format and break spacing.
 }

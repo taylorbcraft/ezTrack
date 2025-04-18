@@ -61,6 +61,15 @@ ez_map(clean_data)
 
 ---
 
+### `ez_latitude_plot()` - Plot Latitude Over Time
+```r
+ez_latitude_plot(clean_data)
+```
+- Creates a time series plot of latitude (y-axis) over timestamp (x-axis)
+- Optionally facets the plot by animal and allows customization of x-axis date format and break spacing
+
+---
+
 ## Example Workflow
 ```r
 library(ezTrack)
@@ -76,6 +85,9 @@ hr <- ez_home_range(trk)
 
 # Step 4: Map It
 ez_map(trk)
+
+# Step 5: Latitude Plot
+ez_latitude_plot(trk)
 ```
 
 ---
@@ -91,7 +103,7 @@ ez_map(trk)
 
 Install missing packages using:
 ```r
-install.packages(c("sf", "leaflet", "geosphere", "adehabitatHR", "readxl", "knitr", "kableExtra", "htmltools"))
+install.packages(c("sf", "leaflet", "geosphere", "adehabitatHR", "readxl", "knitr", "kableExtra", "htmltools","ggplot2"))
 ```
 
 ---
