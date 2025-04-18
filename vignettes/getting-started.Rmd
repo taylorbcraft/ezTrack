@@ -10,7 +10,10 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 4,
+  fig.height = 2,
+  dpi = 150
 )
 library(ezTrack)
 ```
@@ -35,7 +38,7 @@ sample_data <- data.frame(
   animal = rep(paste0("Animal_", LETTERS[1:n_individuals]), each = n_points),
   date = rep(seq.POSIXt(
     from = as.POSIXct("2023-01-01 08:00"),
-    by = "24 hours",
+    by = "36 hours",
     length.out = n_points), n_individuals),
   location_long = runif(n_individuals * n_points, 5.5, 7),
   location_lat = runif(n_individuals * n_points, 52, 53.5)
@@ -131,7 +134,30 @@ Home ranges can be vizualised with `ez_map`:
 ez_map(home_ranges_mcp)
 ez_map(home_ranges_kde, homeRangeColor = 'id')
 ```
+## 5. Visualizing Latitude Over Time
 
+`ez_latitude_plot()` can be used to visualize latitudinal movement (north-south) over time for each tracked animal. The plot supports:
+
+- Optional faceting by individual
+
+- Date axis customization
+
+- Date range filtering
+
+```{r}
+ez_latitude_plot(tracks)
+
+ez_latitude_plot(
+  tracks,
+  facet = TRUE,
+  startDate = "2023-01-01",
+  endDate = "2023-01-05",
+  date_breaks = "1 day",
+  date_format = "%d-%b",
+)
+
+
+```
 
 ## Developer Notes
 
@@ -140,3 +166,4 @@ To update vignette pkgdown site:
 devtools::build_vignettes()
 pkgdown::build_articles()
 pkgdown::build_site()
+
