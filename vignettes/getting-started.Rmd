@@ -20,30 +20,30 @@ library(ezTrack)
 
 ## Introduction
 
-This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans, standardizes, and (optionally) converts it to a Spatial Feature, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map.
+This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans, standardizes, and converts it to a Spatial Feature, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map, and plots the latitudes over time.
 
 ## 1. Format Tracking Data
 
-We pass a simulated sample dataset to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude.
+We pass a dataset of GPS-tagged Black-tailed Godwits to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude.
 
 If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
 
 ```{r}
-data("sample_data")
-head(sample_data)
+data(godwit_tracks)
+head(godwit_tracks)
 
 tracks <- ez_track(
-  data = sample_data,
+  data = godwit_tracks,
   as_sf = TRUE
 )
 
 tracks_manual <- ez_track(
-  data = sample_data,
+  data = godwit_tracks,
   as_sf = TRUE,
-  id_col = 'animal',
-  time_col = 'date',
-  x_col = 'location_long',
-  y_col = 'location_lat',
+  id_col = 'individual.local.identifier',
+  time_col = 'timestamp',
+  x_col = 'location.long',
+  y_col = 'location.lat',
 )
 ```
 
@@ -97,8 +97,8 @@ As well as with date range filters.
 
 ```{r}
 ez_map(tracks,
-  startDate = "2023-01-01",
-  endDate = "2023-01-10")
+  startDate = "2025-04-10",
+  endDate = "2025-04-28")
 
 ```
 
@@ -107,8 +107,7 @@ ez_map(tracks,
 Individual or population-level Minimum Convex Polygons (MCP) or Kernel Density Estimate (KDE) home ranges can be created with `ez_home_range()`.
 
 ```{r}
-home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 50)
-home_ranges_kde <- ez_home_range(tracks, method = 'kde', level = 95)
+home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 50, startDate = '2025-04-12')
 
 ```
 
@@ -117,8 +116,7 @@ The result is an `sf` object containing one home range polygon per tracked indiv
 Home ranges can be vizualised with `ez_map`:
 
 ```{r}
-ez_map(home_ranges_mcp)
-ez_map(home_ranges_kde, homeRangeColor = 'id')
+ez_map(home_ranges_mcp, homeRangeColor = 'id')
 ```
 ## 5. Visualize Latitude Over Time
 
@@ -136,10 +134,10 @@ ez_latitude_plot(tracks)
 ez_latitude_plot(
   tracks,
   facet = TRUE,
-  startDate = "2023-01-01",
-  endDate = "2023-01-05",
-  date_breaks = "1 day",
-  date_format = "%d-%b",
+  startDate = "2025-01-01",
+  endDate = "2025-04-28",
+  date_breaks = "1 month",
+  date_format = "%b",
 )
 
 

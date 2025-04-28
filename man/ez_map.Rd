@@ -17,6 +17,7 @@ ez_map(
   pathWidth = 2,
   pathOpacity = 1,
   homeRangeColor = "blue",
+  colorPalette = "viridis",
   showLabels = TRUE,
   startDate = NULL,
   endDate = NULL
@@ -46,6 +47,8 @@ ez_map(
 \item{pathOpacity}{Numeric (0–1), opacity of paths. Default is 1.}
 
 \item{homeRangeColor}{CSS color string or column name to color polygon geometries. Default is "blue".}
+
+\item{colorPalette}{Palette to use if coloring by ID or another column. Supports "viridis", "plasma", "inferno", "magma", "cividis", "turbo", or "Set1". Default is "viridis".}
 
 \item{showLabels}{Logical, show ID + timestamp in hover labels. Default is TRUE.}
 

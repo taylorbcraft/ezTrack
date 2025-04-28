@@ -1,16 +1,20 @@
 #' Estimate Home Ranges for Tracked Individuals or Population
 #'
-#' Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE).
+#' Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE),
+#' with optional date filtering.
 #'
-#' @param data A data frame or `sf` object with columns `id`, `x`, and `y`.
+#' @param data A data frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`.
 #' @param method Method for home range estimation. One of `"mcp"` (default) or `"kde"`.
 #' @param level Percentage of points to include in the home range (e.g., 95 for 95\%). Default is 95.
 #' @param crs Optional CRS to project the data before calculation. If NULL, uses EPSG:3857 (Web Mercator).
 #' @param population Logical. If TRUE, returns a single home range polygon for all data combined.
+#' @param startDate Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data before this date.
+#' @param endDate Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data after this date.
 #'
 #' @return An `sf` object of home range polygon(s).
 #' @export
-ez_home_range <- function(data, method = "mcp", level = 95, crs = NULL, population = FALSE) {
+ez_home_range <- function(data, method = "mcp", level = 95, crs = NULL, population = FALSE,
+                          startDate = NULL, endDate = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) stop("Please install the 'sf' package.")
   if (!requireNamespace("sp", quietly = TRUE)) stop("Please install the 'sp' package.")
   if (!requireNamespace("adehabitatHR", quietly = TRUE)) stop("Please install the 'adehabitatHR' package.")
@@ -18,6 +22,22 @@ ez_home_range <- function(data, method = "mcp", level = 95, crs = NULL, populati
   # Ensure sf object
   if (!inherits(data, "sf")) {
     data <- sf::st_as_sf(data, coords = c("x", "y"), crs = 4326, remove = FALSE)
+  }
+
+  # Filter by startDate
+  if (!is.null(startDate)) {
+    if (inherits(startDate, "character")) startDate <- as.Date(startDate)
+    data <- data[data$timestamp >= as.POSIXct(startDate), ]
+  }
+
+  # Filter by endDate
+  if (!is.null(endDate)) {
+    if (inherits(endDate, "character")) endDate <- as.Date(endDate)
+    data <- data[data$timestamp <= as.POSIXct(endDate + 1) - 1, ]
+  }
+
+  if (nrow(data) == 0) {
+    stop("No data remaining after applying startDate and endDate filters.")
   }
 
   crs <- crs %||% 3857

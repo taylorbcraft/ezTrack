@@ -16,6 +16,7 @@
 #' @param pathWidth Line width of paths. Default is 2.
 #' @param pathOpacity Numeric (0–1), opacity of paths. Default is 1.
 #' @param homeRangeColor CSS color string or column name to color polygon geometries. Default is "blue".
+#' @param colorPalette Palette to use if coloring by ID or another column. Supports "viridis", "plasma", "inferno", "magma", "cividis", "turbo", or "Set1". Default is "viridis".
 #' @param showLabels Logical, show ID + timestamp in hover labels. Default is TRUE.
 #' @param startDate Optional. A `Date` object or a date string (e.g., "2021-01-01").
 #' @param endDate Optional. A `Date` object or a date string (e.g., "2021-12-31").
@@ -35,13 +36,13 @@ ez_map <- function(data,
                    pathWidth = 2,
                    pathOpacity = 1,
                    homeRangeColor = "blue",
+                   colorPalette = "viridis",
                    showLabels = TRUE,
                    startDate = NULL,
                    endDate = NULL) {
 
-  if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("The 'leaflet' package is required for ez_map(). Please install it.")
-  }
+  if (!requireNamespace("leaflet", quietly = TRUE)) stop("The 'leaflet' package is required. Please install it.")
+  if (!requireNamespace("viridisLite", quietly = TRUE)) stop("The 'viridisLite' package is required. Please install it.")
 
   # Handle polygon features like home ranges
   if (inherits(data, "sf") && all(sf::st_geometry_type(data) %in% c("POLYGON", "MULTIPOLYGON"))) {
@@ -64,7 +65,7 @@ ez_map <- function(data,
     )
   }
 
-  # Only check these columns if it's point/line data
+  # Check required columns for point/line data
   if (!all(c("id", "x", "y", "timestamp") %in% names(data))) {
     stop("Input data must include columns: 'id', 'x', 'y', and 'timestamp'")
   }
@@ -79,10 +80,10 @@ ez_map <- function(data,
   if (!is.null(endDate)) {
     if (inherits(endDate, "character")) endDate <- as.Date(endDate)
     if (!inherits(endDate, "Date")) stop("endDate must be a Date or a string in YYYY-MM-DD format.")
-    data <- data[data$timestamp <= as.POSIXct(endDate + 1) - 1, ]  # full end day
+    data <- data[data$timestamp <= as.POSIXct(endDate + 1) - 1, ]
   }
 
-  # Initialize leaflet map
+  # Initialize map
   map <- leaflet::leaflet() %>%
     leaflet::addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
     leaflet::addProviderTiles("CartoDB.Positron", group = "Light") %>%
@@ -93,12 +94,21 @@ ez_map <- function(data,
 
   ids <- unique(data$id)
 
+  # Choose palette function based on selected palette
+  get_palette <- function(palette_name, domain) {
+    if (palette_name %in% c("viridis", "plasma", "inferno", "magma", "cividis", "turbo")) {
+      leaflet::colorFactor(viridisLite::viridis(length(unique(domain)), option = palette_name), domain = domain)
+    } else {
+      suppressWarnings(leaflet::colorFactor(palette_name, domain = domain))  # Handles "Set1" with >9 safely
+    }
+  }
+
   for (i in seq_along(ids)) {
     sub <- data[data$id == ids[i], ]
 
     # Dynamic path color
     path_col <- if (is.character(pathColor) && pathColor %in% names(data)) {
-      pal <- leaflet::colorFactor("Set1", domain = data[[pathColor]])
+      pal <- get_palette(colorPalette, data[[pathColor]])
       pal(sub[[pathColor]][1])
     } else {
       pathColor
@@ -106,7 +116,7 @@ ez_map <- function(data,
 
     # Dynamic point color
     point_col <- if (is.character(pointColor) && pointColor %in% names(data)) {
-      pal <- leaflet::colorFactor("Set1", domain = data[[pointColor]])
+      pal <- get_palette(colorPalette, data[[pointColor]])
       pal(sub[[pointColor]][1])
     } else {
       pointColor

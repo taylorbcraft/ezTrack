@@ -4,10 +4,18 @@
 \alias{ez_home_range}
 \title{Estimate Home Ranges for Tracked Individuals or Population}
 \usage{
-ez_home_range(data, method = "mcp", level = 95, crs = NULL, population = FALSE)
+ez_home_range(
+  data,
+  method = "mcp",
+  level = 95,
+  crs = NULL,
+  population = FALSE,
+  startDate = NULL,
+  endDate = NULL
+)
 }
 \arguments{
-\item{data}{A data frame or `sf` object with columns `id`, `x`, and `y`.}
+\item{data}{A data frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`.}
 
 \item{method}{Method for home range estimation. One of `"mcp"` (default) or `"kde"`.}
 
@@ -16,10 +24,15 @@ ez_home_range(data, method = "mcp", level = 95, crs = NULL, population = FALSE)
 \item{crs}{Optional CRS to project the data before calculation. If NULL, uses EPSG:3857 (Web Mercator).}
 
 \item{population}{Logical. If TRUE, returns a single home range polygon for all data combined.}
+
+\item{startDate}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data before this date.}
+
+\item{endDate}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data after this date.}
 }
 \value{
 An `sf` object of home range polygon(s).
 }
 \description{
-Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE).
+Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE),
+with optional date filtering.
 }

@@ -148,11 +148,23 @@
 </ul>
 <hr>
 </div>
+<div class="section level3">
+<h3 id="ez_latitude_plot---plot-latitude-over-time">
+<code>ez_latitude_plot()</code> - Plot Latitude Over Time<a class="anchor" aria-label="anchor" href="#ez_latitude_plot---plot-latitude-over-time"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">clean_data</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Creates a time series plot of latitude (y-axis) over timestamp (x-axis)</li>
+<li>Optionally facets the plot by animal and allows customization of x-axis date format and break spacing</li>
+</ul>
+<hr>
+</div>
 </div>
 <div class="section level2">
 <h2 id="example-workflow">Example Workflow<a class="anchor" aria-label="anchor" href="#example-workflow"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/taylorbcraft/ezTrack" class="external-link">ezTrack</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1: Import</span></span>
@@ -165,7 +177,10 @@
 <span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 4: Map It</span></span>
-<span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Step 5: Latitude Plot</span></span>
+<span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -184,10 +199,12 @@
 <code>readxl</code> (Excel support)</li>
 <li>
 <code>knitr</code>, <code>kableExtra</code>, <code>htmltools</code> (HTML reporting)</li>
+<li>
+<code>ggplot2</code> (latitude plotting)</li>
 </ul>
 <p>Install missing packages using:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"leaflet"</span>, <span class="st">"geosphere"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"readxl"</span>, <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"leaflet"</span>, <span class="st">"geosphere"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"readxl"</span>, <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>,<span class="st">"ggplot2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
