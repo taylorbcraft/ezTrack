@@ -1,0 +1,28 @@
+# _pkgdown.yml
+
+# Basic settings
+title: "ezTrack"
+navbar:
+  structure:
+    left:
+      - home
+      - reference
+      - articles
+      - news
+  components:
+    home: ~
+    reference: ~
+    articles: ~
+    news: ~
+
+# Articles (vignettes)
+articles:
+  - title: "Getting Started"
+    contents:
+      - getting-started
+
+# Options to always rebuild vignettes/articles
+lazy: false
+template:
+  bootstrap: 5
+  bootswatch: flatly

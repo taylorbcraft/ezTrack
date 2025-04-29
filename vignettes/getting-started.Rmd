@@ -130,24 +130,23 @@ ez_map(home_ranges_mcp, homeRangeColor = 'id')
 
 ```{r}
 ez_latitude_plot(tracks)
+```
 
+```{r, fig.width=15, fig.height=10}
 ez_latitude_plot(
   tracks,
   facet = TRUE,
   startDate = "2025-01-01",
   endDate = "2025-04-28",
   date_breaks = "1 month",
-  date_format = "%b",
+  date_format = "%b"
 )
-
-
 ```
+
 
 ## Developer Notes
 
-To update vignette pkgdown site:
-
-devtools::build_vignettes()
-pkgdown::build_articles()
+# To update vignette pkgdown site:
 pkgdown::build_site()
+
 
