@@ -24,7 +24,7 @@ This vignette demonstrates a full workflow using ezTrack. It imports tracking da
 
 ## 1. Format Tracking Data
 
-We pass a dataset of GPS-tagged Black-tailed Godwits to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude.
+We pass a dataset of GPS-tagged migratory shorebirds to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude.
 
 If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
 
@@ -98,7 +98,9 @@ As well as with date range filters.
 ```{r}
 ez_map(tracks,
   startDate = "2025-04-10",
-  endDate = "2025-04-28")
+  endDate = "2025-04-28",
+  pointColor = 'id',
+  pathColor = 'id')
 
 ```
 
@@ -107,7 +109,7 @@ ez_map(tracks,
 Individual or population-level Minimum Convex Polygons (MCP) or Kernel Density Estimate (KDE) home ranges can be created with `ez_home_range()`.
 
 ```{r}
-home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 50, startDate = '2025-04-12')
+home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 95, startDate = '2025-04-12')
 
 ```
 
@@ -120,7 +122,14 @@ ez_map(home_ranges_mcp, homeRangeColor = 'id')
 ```
 ## 5. Visualize Latitude Over Time
 
-`ez_latitude_plot()` can be used to visualize latitudinal movement (north-south) over time for each tracked animal. The plot supports:
+`ez_latitude_plot()` can be used to visualize latitudinal movement (north-south) over time for each tracked animal. 
+
+
+```{r}
+ez_latitude_plot(tracks)
+```
+
+The plot supports:
 
 - Optional faceting by individual
 
@@ -128,9 +137,8 @@ ez_map(home_ranges_mcp, homeRangeColor = 'id')
 
 - Date range filtering
 
-```{r}
-ez_latitude_plot(tracks)
-```
+- `ggplot2` parameters for further customization.
+
 
 ```{r, fig.width=15, fig.height=10}
 ez_latitude_plot(
@@ -140,13 +148,16 @@ ez_latitude_plot(
   endDate = "2025-04-28",
   date_breaks = "1 month",
   date_format = "%b"
+) +
+  ggplot2::theme(
+  text = ggplot2::element_text(size = 18),
+  axis.title = ggplot2::element_text(size = 20),
+  axis.text = ggplot2::element_text(size = 18),
 )
 ```
 
 
 ## Developer Notes
-
 # To update vignette pkgdown site:
 pkgdown::build_site()
-
 
