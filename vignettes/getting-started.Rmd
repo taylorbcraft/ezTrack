@@ -76,31 +76,12 @@ We can display the movement tracks using an interactive Leaflet map with `ez_map
 ez_map(tracks)
 ```
 
-Or with additional visualization arguments.
-
-```{r}
-ez_map(tracks, plotPath = TRUE,
-  plotPoints = TRUE,
-  pointRadius = 2,
-  pointColor = "id",
-  pointOpacity = 1,
-  pointStroke = TRUE,
-  pointStrokeColor = "black",
-  pathColor = "id",
-  pathWidth = 2,
-  pathOpacity = 0.5,
-  showLabels = TRUE)
-
-```
-
 As well as with date range filters.
 
 ```{r}
 ez_map(tracks,
   startDate = "2025-04-10",
-  endDate = "2025-04-28",
-  pointColor = 'id',
-  pathColor = 'id')
+  endDate = "2025-04-28")
 
 ```
 

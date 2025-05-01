@@ -32,7 +32,7 @@ ez_map(
 
 \item{pointRadius}{Numeric, size of point markers. Default is 4.}
 
-\item{pointColor}{CSS color string or column name to color points. Default is "blue".}
+\item{pointColor}{CSS color string or column name to color points. Default is `"id"`.}
 
 \item{pointOpacity}{Numeric (0–1), fill opacity for points. Default is 0.8.}
 
@@ -40,7 +40,7 @@ ez_map(
 
 \item{pointStrokeColor}{Border color for points. Default is "black".}
 
-\item{pathColor}{CSS color string or column name to color paths. Default is "blue".}
+\item{pathColor}{CSS color string or column name to color paths. Default is `"id"`.}
 
 \item{pathWidth}{Line width of paths. Default is 2.}
 
@@ -48,7 +48,7 @@ ez_map(
 
 \item{homeRangeColor}{CSS color string or column name to color polygon geometries. Default is "blue".}
 
-\item{colorPalette}{Palette to use if coloring by ID or another column. Supports "viridis", "plasma", "inferno", "magma", "cividis", "turbo", or "Set1". Default is "viridis".}
+\item{colorPalette}{Palette to use if coloring by `id` or another column. Supports "viridis", "plasma", "inferno", "magma", "cividis", "turbo", or "Set1". Default is "viridis".}
 
 \item{showLabels}{Logical, show ID + timestamp in hover labels. Default is TRUE.}
 
@@ -62,5 +62,5 @@ A `leaflet` map object.
 \description{
 Display animal tracks on an interactive Leaflet map with intuitive styling arguments.
 Optionally subset the data by a start and end date. Supports plotting tracks (lines and points)
-and home ranges (POLYGON or MULTIPOLYGON).
+and home ranges (POLYGON or MULTIPOLYGON). By default, points and paths are colored by `id`.
 }
