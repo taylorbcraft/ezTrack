@@ -64,14 +64,48 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">godwit_tracks</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">godwit_tracks</span> <span class="op">&lt;-</span> <span class="fu"><a href="ez_track.html">ez_track</a></span><span class="op">(</span><span class="va">godwit_tracks</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Detected columns - id: individual.local.identifier, timestamp: timestamp, x: location.long, y: location.lat</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Removed 852 row(s) with missing values.</span>
 <span class="r-in"><span><span class="fu"><a href="ez_summary.html">ez_summary</a></span><span class="op">(</span><span class="va">godwit_tracks</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ez_summary(godwit_tracks):</span> Data must contain columns: id, timestamp, x, y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id n_fixes      first_location       last_location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 animal1    1095 2024-12-31 16:00:00 2025-04-25 14:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 animal2    1153 2024-12-31 16:00:00 2025-04-27 22:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 animal3    1022 2024-12-31 16:00:00 2025-04-23 16:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 animal4     214 2024-12-31 16:00:00 2025-04-27 16:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 animal5     223 2024-12-31 16:00:00 2025-04-27 16:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 animal6     551 2024-12-31 16:00:00 2025-04-27 16:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   tracking_duration_days fixes_per_day median_interval_hours max_time_gap_days</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 114.92          9.53                     2              0.33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 117.25          9.83                     2              1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 113.00          9.04                     2              1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                 117.00          1.83                     6             10.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 117.00          1.91                     6             13.38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 117.00          4.71                     4              1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   distance_km avg_speed_kmh</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     5649.19          2.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     5495.39          1.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     6370.80          2.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     2414.07          0.86</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     2372.16          0.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     5438.92          1.94</span>
 <span class="r-in"><span><span class="fu"><a href="ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">godwit_tracks</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 methods overwritten by 'adehabitatMA':</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   method                       from</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   print.SpatialPixelsDataFrame sp  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   print.SpatialPixels          sp  </span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `[.data.frame`(x, coords):</span> undefined columns selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 6 features and 2 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -16.45874 ymin: 11.95901 xmax: 5.57653 ymax: 53.17665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              id      area                       geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> animal1 animal1 153500386 POLYGON ((4.90432 52.09728,...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> animal2 animal2 186981697 POLYGON ((5.54264 53.13103,...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> animal3 animal3 233433467 POLYGON ((5.57653 53.00222,...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> animal4 animal4  19574803 POLYGON ((5.56447 53.00242,...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> animal5 animal5  66478626 POLYGON ((5.50735 52.93654,...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> animal6 animal6 197397195 POLYGON ((-0.2713 39.24599,...</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

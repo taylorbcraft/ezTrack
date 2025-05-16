@@ -33,9 +33,7 @@ The following summary statistics are returned for each unique `id`:
 - `avg_speed_kmh`: Average speed (km/h), computed as distance divided by tracking duration in hours
 }
 \examples{
-\dontrun{
-df <- ez_track("tracking_data.csv")
-ez_summary(df)
-ez_summary(df, report = TRUE)
-}
+data(godwit_tracks)
+clean <- ez_track(godwit_tracks)
+ez_summary(clean)
 }

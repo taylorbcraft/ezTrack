@@ -18,6 +18,7 @@
 #'
 #' @examples
 #' data(godwit_tracks)
+#' godwit_tracks <- ez_track(godwit_tracks)
 #' ez_summary(godwit_tracks)
 #' ez_home_range(godwit_tracks)
 "godwit_tracks"

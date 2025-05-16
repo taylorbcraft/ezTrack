@@ -4,15 +4,19 @@
 #' It supports common input formats including data frames, `sf` and `Spatial` objects, or file paths to CSV, Excel, Shapefiles, GeoPackages, and GeoJSON.
 #' Optionally returns a spatial object projected to WGS84 (EPSG:4326).
 #'
+#' @importFrom methods as
+#' @importFrom stats median complete.cases
+#' @importFrom utils read.csv
+#'
 #' @param data A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or a path to CSV, XLSX, SHP, GPKG, or GeoJSON.
 #' @param format Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg", "geojson".
 #' @param tz Timezone for timestamps. Default is "UTC".
 #' @param crs EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).
 #' @param as_sf Logical. Should the result be returned as an `sf` object? Default is TRUE.
-#' @param id_col Name of the column to use as ID. If NULL, guessed automatically.
-#' @param time_col Name of the timestamp column. If NULL, guessed automatically.
-#' @param x_col Name of the longitude/X column. If NULL, guessed automatically.
-#' @param y_col Name of the latitude/Y column. If NULL, guessed automatically.
+#' @param id Column name for individual identifier. If NULL, guessed automatically.
+#' @param timestamp Column name for timestamp. If NULL, guessed automatically.
+#' @param x Column name for longitude/X coordinate. If NULL, guessed automatically.
+#' @param y Column name for latitude/Y coordinate. If NULL, guessed automatically.
 #' @param verbose Logical. If TRUE, print details during import. Default is TRUE.
 #' @param ... Additional arguments passed to the read function.
 #'
@@ -24,10 +28,10 @@ ez_track <- function(data,
                      tz = "UTC",
                      crs = 4326,
                      as_sf = TRUE,
-                     id_col = NULL,
-                     time_col = NULL,
-                     x_col = NULL,
-                     y_col = NULL,
+                     id = NULL,
+                     timestamp = NULL,
+                     x = NULL,
+                     y = NULL,
                      verbose = TRUE,
                      ...) {
   `%||%` <- function(a, b) if (!is.null(a)) a else b
@@ -37,7 +41,7 @@ ez_track <- function(data,
       if (verbose) message("Handling input as sf object.")
       coords <- sf::st_coordinates(data)
       df <- cbind(sf::st_drop_geometry(data), coords)
-      names(df)[(ncol(df)-1):ncol(df)] <- c("x", "y")
+      names(df)[(ncol(df) - 1):ncol(df)] <- c("x", "y")
       return(df)
     }
 
@@ -81,32 +85,58 @@ ez_track <- function(data,
   # Standardize column names
   names(df) <- tolower(gsub("\\s+", "_", names(df)))
 
-  id_col <- id_col %||% {
-    patterns <- c("^id$", "individual.*identifier", "animal", "track", "trackid", "nick_name", "name")
-    matches <- unlist(lapply(patterns, function(p) grep(p, names(df), value = TRUE)))
-    matches[1]
+  # Define robust pattern lists
+  id_patterns <- c(
+    "^id$", "individual", "individual_id", "individual.local.identifier", "animal", "track", "track_id",
+    "trackid", "tag_id", "collar", "device", "name", "subject", "subject_id"
+  )
+
+  timestamp_patterns <- c(
+    "timestamp", "date_time", "datetime", "timestamp_utc", "fix_time", "fixdate", "time", "date"
+  )
+
+  x_patterns <- c(
+    "^x$", "longitude", "lon", "long", "x_coord", "location_long", 'location.long', "utm_e", "easting", "coordx"
+  )
+
+  y_patterns <- c(
+    "^y$", "latitude", "lat", "y_coord", "location_lat", "location.lat","utm_n", "northing", "coordy"
+  )
+
+  # Flexible matching function
+  match_column <- function(df_names, patterns) {
+    matched <- unlist(lapply(patterns, function(p) grep(p, df_names, value = TRUE)))
+    unique(matched)[1]
   }
 
-  time_col <- time_col %||% grep("timestamp|date|time|datetime", names(df), value = TRUE)[1]
-  x_col    <- x_col    %||% grep("lon|x|longitude", names(df), value = TRUE)[1]
-  y_col    <- y_col    %||% grep("lat|y|latitude", names(df), value = TRUE)[1]
+  # Attempt to guess missing columns
+  id        <- id        %||% match_column(names(df), id_patterns)
+  timestamp <- timestamp %||% match_column(names(df), timestamp_patterns)
+  x         <- x         %||% match_column(names(df), x_patterns)
+  y         <- y         %||% match_column(names(df), y_patterns)
 
-  if (!all(c(id_col, time_col, x_col, y_col) %in% names(df))) {
-    stop("Could not identify required columns: id, timestamp, x, and y.")
+  # Detailed error if any column is missing
+  missing <- c()
+  if (is.null(id))        missing <- c(missing, "id")
+  if (is.null(timestamp)) missing <- c(missing, "timestamp")
+  if (is.null(x))         missing <- c(missing, "x")
+  if (is.null(y))         missing <- c(missing, "y")
+
+  if (length(missing) > 0) {
+    stop("Could not detect required column(s): ", paste(missing, collapse = ", "),
+         ". You may need to explicitly provide the column names using `id`, `timestamp`, `x`, and `y`.")
   }
 
+  # Informative feedback
   if (verbose) {
-    message("Columns detected:")
-    message("id: ", id_col)
-    message("time: ", time_col)
-    message("x: ", x_col)
-    message("y: ", y_col)
+    message("Detected columns - id: ", id, ", timestamp: ", timestamp, ", x: ", x, ", y: ", y)
   }
 
-  names(df)[names(df) == id_col]   <- "id"
-  names(df)[names(df) == time_col] <- "timestamp"
-  names(df)[names(df) == x_col]    <- "x"
-  names(df)[names(df) == y_col]    <- "y"
+  # Rename columns
+  names(df)[names(df) == id]        <- "id"
+  names(df)[names(df) == timestamp] <- "timestamp"
+  names(df)[names(df) == x]         <- "x"
+  names(df)[names(df) == y]         <- "y"
 
   df$timestamp <- as.POSIXct(df$timestamp, tz = tz)
 

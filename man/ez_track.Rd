@@ -10,10 +10,10 @@ ez_track(
   tz = "UTC",
   crs = 4326,
   as_sf = TRUE,
-  id_col = NULL,
-  time_col = NULL,
-  x_col = NULL,
-  y_col = NULL,
+  id = NULL,
+  timestamp = NULL,
+  x = NULL,
+  y = NULL,
   verbose = TRUE,
   ...
 )
@@ -29,13 +29,13 @@ ez_track(
 
 \item{as_sf}{Logical. Should the result be returned as an `sf` object? Default is TRUE.}
 
-\item{id_col}{Name of the column to use as ID. If NULL, guessed automatically.}
+\item{id}{Column name for individual identifier. If NULL, guessed automatically.}
 
-\item{time_col}{Name of the timestamp column. If NULL, guessed automatically.}
+\item{timestamp}{Column name for timestamp. If NULL, guessed automatically.}
 
-\item{x_col}{Name of the longitude/X column. If NULL, guessed automatically.}
+\item{x}{Column name for longitude/X coordinate. If NULL, guessed automatically.}
 
-\item{y_col}{Name of the latitude/Y column. If NULL, guessed automatically.}
+\item{y}{Column name for latitude/Y coordinate. If NULL, guessed automatically.}
 
 \item{verbose}{Logical. If TRUE, print details during import. Default is TRUE.}
 

@@ -75,35 +75,40 @@ ez_latitude_plot(clean_data)
 library(ezTrack)
 
 # Step 1: Import
-trk <- ez_track("tracking.csv")
+data(godwit_tracks)
 
-# Step 2: Summarize
+# Step 2: Standardize
+trk <- ez_track(godwit_tracks)
+
+# Step 3: Summarize
 ez_summary(trk)
 
-# Step 3: Home Range
+# Step 4: Home Range
 hr <- ez_home_range(trk)
 
-# Step 4: Map It
+# Step 5: Map It
 ez_map(trk)
 
-# Step 5: Latitude Plot
+# Step 6: Latitude Plot
 ez_latitude_plot(trk)
 ```
 
 ---
 
 ## Dependencies
-- `sf` (spatial operations)
-- `leaflet` (interactive mapping)
-- `geosphere` (distance travelled calculation)
-- `adehabitatHR` (home range estimation)
-- `readxl` (Excel support)
-- `knitr`, `kableExtra`, `htmltools` (HTML reporting)
-- `ggplot2` (latitude plotting)
+- `sf`, `leaflet`, `geosphere`, `adehabitatHR`: spatial operations, mapping, and home range analysis  
+- `readxl`: Excel import support  
+- `knitr`, `kableExtra`, `htmltools`: HTML reporting  
+- `ggplot2`, `viridisLite`: plotting with color palettes  
+- `magrittr`: for `%>%` pipe in mapping function  
+
 
 Install missing packages using:
 ```r
-install.packages(c("sf", "leaflet", "geosphere", "adehabitatHR", "readxl", "knitr", "kableExtra", "htmltools","ggplot2"))
+install.packages(c(
+  "sf", "leaflet", "geosphere", "adehabitatHR", "readxl",
+  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", "magrittr"
+))
 ```
 
 ---

@@ -13,6 +13,7 @@
 #'
 #' @return An `sf` object of home range polygon(s).
 #' @export
+
 ez_home_range <- function(data, method = "mcp", level = 95, crs = NULL, population = FALSE,
                           startDate = NULL, endDate = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) stop("Please install the 'sf' package.")

@@ -17,6 +17,7 @@ LazyData: true
 RoxygenNote: 7.3.2
 Depends: R (>= 3.6.0)
 Imports:
+    methods,
     sf,
     sp,
     geosphere,
@@ -26,12 +27,13 @@ Imports:
     htmltools,
     utils,
     stats,
-    ggplot2
+    ggplot2,
+    readxl,
+    kableExtra,
+    viridisLite
 VignetteBuilder: knitr
 Suggests:
     knitr,
-    rmarkdown,
-    readxl,
-    kableExtra
+    rmarkdown
 BugReports: https://github.com/taylorbcraft/ezTrack/issues
 URL: https://github.com/taylorbcraft/ezTrack

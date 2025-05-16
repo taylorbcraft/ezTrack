@@ -137,18 +137,21 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/taylorbcraft/ezTrack" class="external-link">ezTrack</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1: Import</span></span>
-<span><span class="va">trk</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_track.html">ez_track</a></span><span class="op">(</span><span class="st">"tracking.csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">godwit_tracks</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 2: Summarize</span></span>
+<span><span class="co"># Step 2: Standardize</span></span>
+<span><span class="va">trk</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_track.html">ez_track</a></span><span class="op">(</span><span class="va">godwit_tracks</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Step 3: Summarize</span></span>
 <span><span class="fu"><a href="reference/ez_summary.html">ez_summary</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 3: Home Range</span></span>
+<span><span class="co"># Step 4: Home Range</span></span>
 <span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 4: Map It</span></span>
+<span><span class="co"># Step 5: Map It</span></span>
 <span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 5: Latitude Plot</span></span>
+<span><span class="co"># Step 6: Latitude Plot</span></span>
 <span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -157,23 +160,26 @@
 </h2>
 <ul>
 <li>
-<code>sf</code> (spatial operations)</li>
+<code>sf</code>, <code>leaflet</code>, <code>geosphere</code>, <code>adehabitatHR</code>: spatial operations, mapping, and home range analysis<br>
+</li>
 <li>
-<code>leaflet</code> (interactive mapping)</li>
+<code>readxl</code>: Excel import support<br>
+</li>
 <li>
-<code>geosphere</code> (distance travelled calculation)</li>
+<code>knitr</code>, <code>kableExtra</code>, <code>htmltools</code>: HTML reporting<br>
+</li>
 <li>
-<code>adehabitatHR</code> (home range estimation)</li>
+<code>ggplot2</code>, <code>viridisLite</code>: plotting with color palettes<br>
+</li>
 <li>
-<code>readxl</code> (Excel support)</li>
-<li>
-<code>knitr</code>, <code>kableExtra</code>, <code>htmltools</code> (HTML reporting)</li>
-<li>
-<code>ggplot2</code> (latitude plotting)</li>
+<code>magrittr</code>: for <code>%&gt;%</code> pipe in mapping function</li>
 </ul>
 <p>Install missing packages using:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"leaflet"</span>, <span class="st">"geosphere"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"readxl"</span>, <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>,<span class="st">"ggplot2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"sf"</span>, <span class="st">"leaflet"</span>, <span class="st">"geosphere"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"readxl"</span>,</span>
+<span>  <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>, <span class="st">"ggplot2"</span>, <span class="st">"viridisLite"</span>, <span class="st">"magrittr"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">

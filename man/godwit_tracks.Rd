@@ -24,6 +24,7 @@ A dataset of godwit tracking data used as an example for ezTrack functions.
 }
 \examples{
 data(godwit_tracks)
+godwit_tracks <- ez_track(godwit_tracks)
 ez_summary(godwit_tracks)
 ez_home_range(godwit_tracks)
 }

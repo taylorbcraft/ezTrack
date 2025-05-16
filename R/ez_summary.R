@@ -23,11 +23,10 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df <- ez_track("tracking_data.csv")
-#' ez_summary(df)
-#' ez_summary(df, report = TRUE)
-#' }
+#' data(godwit_tracks)
+#' clean <- ez_track(godwit_tracks)
+#' ez_summary(clean)
+
 ez_summary <- function(data, startDate = NULL, endDate = NULL, report = FALSE) {
   if (!requireNamespace("geosphere", quietly = TRUE)) {
     stop("The 'geosphere' package is required for ez_summary(). Please install it.")
@@ -89,7 +88,6 @@ ez_summary <- function(data, startDate = NULL, endDate = NULL, report = FALSE) {
     )
   })
 
-  summary_df <- do.call(rbind, summary_list)
   summary_df <- do.call(rbind, summary_list)
   rownames(summary_df) <- NULL
 
