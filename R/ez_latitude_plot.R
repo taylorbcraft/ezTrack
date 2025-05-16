@@ -12,6 +12,8 @@
 #'
 #' @return A ggplot object.
 #' @export
+#' @importFrom ggplot2 ggplot aes geom_line facet_wrap scale_color_viridis_d scale_x_datetime labs theme_minimal theme
+
 ez_latitude_plot <- function(data,
                              color_palette = "turbo",
                              facet = FALSE,

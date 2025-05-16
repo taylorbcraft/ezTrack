@@ -24,6 +24,8 @@
 #' @return A `leaflet` map object.
 #' @export
 #' @importFrom magrittr %>%
+#' @importFrom leaflet addLegend addPolylines addCircleMarkers addProviderTiles addLayersControl leaflet layersControlOptions colorFactor
+
 ez_map <- function(data,
                    plotPath = TRUE,
                    plotPoints = TRUE,
