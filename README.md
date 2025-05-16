@@ -21,7 +21,7 @@ devtools::install_github("taylorbcraft/ezTrack")
 
 ### `ez_track()` - Clean & Standardize Tracking Data
 ```r
-clean_data <- ez_track("my_tracking_file.csv")
+tracking_data <- ez_track("my_tracking_file.csv")
 ```
 - Auto-detects columns for `id`, `timestamp`, `x`, and `y`
 - Supports CSV, Excel, shapefiles (.shp), GeoPackages (.gpkg), and GeoJSON files
@@ -33,7 +33,7 @@ clean_data <- ez_track("my_tracking_file.csv")
 
 ### `ez_summary()` - Quick Data Summary
 ```r
-ez_summary(clean_data)
+ez_summary(tracking_data)
 ```
 - Per-ID stats: duration, fixes/day, distance, speed
 - Filters by date range
@@ -43,7 +43,7 @@ ez_summary(clean_data)
 
 ### `ez_home_range()` - Estimate Home Ranges
 ```r
-ranges <- ez_home_range(clean_data, method = "mcp", level = 95)
+ranges <- ez_home_range(tracking_data, method = "mcp", level = 95)
 ```
 - Supports **MCP** and **KDE** methods
 - Returns `sf` polygon(s)
@@ -53,7 +53,7 @@ ranges <- ez_home_range(clean_data, method = "mcp", level = 95)
 
 ### `ez_map()` - Interactive Mapping with Leaflet
 ```r
-ez_map(clean_data)
+ez_map(tracking_data)
 ```
 - Visualize tracks, points, and home ranges
 - Customize colors, radius, opacity, and labels
@@ -63,7 +63,7 @@ ez_map(clean_data)
 
 ### `ez_latitude_plot()` - Plot Latitude Over Time
 ```r
-ez_latitude_plot(clean_data)
+ez_latitude_plot(tracking_data)
 ```
 - Creates a time series plot of latitude (y-axis) over timestamp (x-axis)
 - Optionally facets the plot by animal and allows customization of x-axis date format and break spacing
