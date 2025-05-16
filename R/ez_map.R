@@ -171,3 +171,13 @@ ez_map <- function(data,
 
   return(map)
 }
+
+#' Pipe operator
+#'
+#' Re-exports the magrittr pipe for use in user scripts.
+#'
+#' @importFrom magrittr %>%
+#' @export
+#' @name %>%
+NULL
+
