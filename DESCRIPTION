@@ -1,6 +1,6 @@
 Package: ezTrack
 Type: Package
-Title: Easy Tools for Exploring Animal Tracking Data
+Title: ezTrack: an R Package with tools to enable exploration of animal movement data
 Version: 0.1.0
 Authors@R: 
     person(given = "Taylor", 
@@ -30,7 +30,8 @@ Imports:
     ggplot2,
     readxl,
     kableExtra,
-    viridisLite
+    viridisLite,
+    dplyr
 VignetteBuilder: knitr
 Suggests:
     knitr,

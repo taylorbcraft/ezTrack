@@ -10,8 +10,8 @@ ez_latitude_plot(
   facet = FALSE,
   date_format = NULL,
   date_breaks = NULL,
-  startDate = NULL,
-  endDate = NULL
+  start_date = NULL,
+  end_date = NULL
 )
 }
 \arguments{
@@ -25,9 +25,9 @@ ez_latitude_plot(
 
 \item{date_breaks}{Optional. Interval for x-axis breaks (e.g., "1 day", "2 weeks"). Default is automatic.}
 
-\item{startDate}{Optional. A `Date` object or string (e.g., "2023-01-01"). Filters out data before this date.}
+\item{start_date}{Optional. A `Date` object or string (e.g., "2023-01-01"). Filters out data before this date.}
 
-\item{endDate}{Optional. A `Date` object or string (e.g., "2023-02-01"). Filters out data after this date.}
+\item{end_date}{Optional. A `Date` object or string (e.g., "2023-02-01"). Filters out data after this date.}
 }
 \value{
 A ggplot object.

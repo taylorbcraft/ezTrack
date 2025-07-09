@@ -14,38 +14,38 @@ ez_track(
   timestamp = NULL,
   x = NULL,
   y = NULL,
+  keep_original_cols = TRUE,
   verbose = TRUE,
+  subsample = "none",
   ...
 )
 }
 \arguments{
-\item{data}{A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or a path to CSV, XLSX, SHP, GPKG, or GeoJSON.}
+\item{data}{A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or path to CSV, XLSX, SHP, or GPKG.}
 
-\item{format}{Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg", "geojson".}
+\item{format}{Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg".}
 
 \item{tz}{Timezone for timestamps. Default is "UTC".}
 
 \item{crs}{EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).}
 
-\item{as_sf}{Logical. Should the result be returned as an `sf` object? Default is TRUE.}
+\item{as_sf}{Logical. Return an `sf` object? Default is TRUE.}
 
-\item{id}{Column name for individual identifier. If NULL, guessed automatically.}
+\item{id, }{timestamp, x, y Optional. Column names for id, timestamp, and coordinates.}
 
-\item{timestamp}{Column name for timestamp. If NULL, guessed automatically.}
+\item{keep_original_cols}{Logical. If FALSE, drops non-standard columns and only retains `id`, `timestamp`, `x`, and `y`. Default is TRUE.}
 
-\item{x}{Column name for longitude/X coordinate. If NULL, guessed automatically.}
+\item{verbose}{Logical. Print messages? Default is TRUE.}
 
-\item{y}{Column name for latitude/Y coordinate. If NULL, guessed automatically.}
+\item{subsample}{Optional. Format: `"1 per hour"` or `"2 per day"`. Subsamples by time bin. Use `"none"` to disable.}
 
-\item{verbose}{Logical. If TRUE, print details during import. Default is TRUE.}
-
-\item{...}{Additional arguments passed to the read function.}
+\item{...}{Passed to the read function.}
 }
 \value{
-A data.frame or `sf` object with standardized columns `id`, `timestamp`, `x`, and `y`. Missing values and duplicate (id, timestamp) rows are removed.
+A data.frame or `sf` object with columns `id`, `timestamp`, `x`, `y`.
 }
 \description{
-This function imports and standardizes tracking data into a tidy format with columns: `id`, `timestamp`, `x`, and `y`.
-It supports common input formats including data frames, `sf` and `Spatial` objects, or file paths to CSV, Excel, Shapefiles, GeoPackages, and GeoJSON.
-Optionally returns a spatial object projected to WGS84 (EPSG:4326).
+Imports and standardizes tracking data into a tidy format with columns: `id`, `timestamp`, `x`, and `y`.
+Supports input as data frames, `sf`, `Spatial*` objects, or file paths to CSV, Excel, Shapefiles, and GeoPackages.
+Optionally returns a spatial object projected to WGS84 (EPSG:4326), and supports subsampling (e.g., "1 per hour").
 }

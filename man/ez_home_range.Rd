@@ -10,8 +10,9 @@ ez_home_range(
   level = 95,
   crs = NULL,
   population = FALSE,
-  startDate = NULL,
-  endDate = NULL
+  start_date = NULL,
+  end_date = NULL,
+  kde_extent = 1
 )
 }
 \arguments{
@@ -19,20 +20,21 @@ ez_home_range(
 
 \item{method}{Method for home range estimation. One of `"mcp"` (default) or `"kde"`.}
 
-\item{level}{Percentage of points to include in the home range (e.g., 95 for 95\%). Default is 95.}
+\item{level}{Percentage of points to include in the home range (e.g., 95 for 95%). Default is 95.}
 
 \item{crs}{Optional CRS to project the data before calculation. If NULL, uses EPSG:3857 (Web Mercator).}
 
 \item{population}{Logical. If TRUE, returns a single home range polygon for all data combined.}
 
-\item{startDate}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data before this date.}
+\item{start_date}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data before this date.}
 
-\item{endDate}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data after this date.}
+\item{end_date}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data after this date.}
+
+\item{kde_extent}{Numeric. Passed to `adehabitatHR::kernelUD()` to control the extent of the grid for KDE. Default is 1.}
 }
 \value{
 An `sf` object of home range polygon(s).
 }
 \description{
-Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE),
-with optional date filtering.
+Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE).
 }

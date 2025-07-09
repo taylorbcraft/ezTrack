@@ -7,8 +7,8 @@
 #' @param facet Logical. If TRUE, creates a separate facet panel for each animal. Default is FALSE.
 #' @param date_format Optional. Format for date labels on the x-axis (e.g., "\%b \%d", "\%Y-\%m", "\%H:\%M"). Default is automatic.
 #' @param date_breaks Optional. Interval for x-axis breaks (e.g., "1 day", "2 weeks"). Default is automatic.
-#' @param startDate Optional. A `Date` object or string (e.g., "2023-01-01"). Filters out data before this date.
-#' @param endDate Optional. A `Date` object or string (e.g., "2023-02-01"). Filters out data after this date.
+#' @param start_date Optional. A `Date` object or string (e.g., "2023-01-01"). Filters out data before this date.
+#' @param end_date Optional. A `Date` object or string (e.g., "2023-02-01"). Filters out data after this date.
 #'
 #' @return A ggplot object.
 #' @export
@@ -19,8 +19,8 @@ ez_latitude_plot <- function(data,
                              facet = FALSE,
                              date_format = NULL,
                              date_breaks = NULL,
-                             startDate = NULL,
-                             endDate = NULL) {
+                             start_date = NULL,
+                             end_date = NULL) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Please install the 'ggplot2' package.")
   if (!requireNamespace("viridisLite", quietly = TRUE)) stop("Please install the 'viridisLite' package.")
 
@@ -30,16 +30,16 @@ ez_latitude_plot <- function(data,
 
   data$timestamp <- as.POSIXct(data$timestamp)
 
-  # Filter by startDate
-  if (!is.null(startDate)) {
-    if (inherits(startDate, "character")) startDate <- as.Date(startDate)
-    data <- data[data$timestamp >= as.POSIXct(startDate), ]
+  # Filter by start_date
+  if (!is.null(start_date)) {
+    if (inherits(start_date, "character")) start_date <- as.Date(start_date)
+    data <- data[data$timestamp >= as.POSIXct(start_date), ]
   }
 
-  # Filter by endDate
-  if (!is.null(endDate)) {
-    if (inherits(endDate, "character")) endDate <- as.Date(endDate)
-    data <- data[data$timestamp <= as.POSIXct(endDate + 1) - 1, ]
+  # Filter by end_date
+  if (!is.null(end_date)) {
+    if (inherits(end_date, "character")) end_date <- as.Date(end_date)
+    data <- data[data$timestamp <= as.POSIXct(end_date + 1) - 1, ]
   }
 
   p <- ggplot2::ggplot(data, ggplot2::aes(x = timestamp, y = y, color = id)) +

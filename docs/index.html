@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Easy Tools for Exploring Animal Tracking Data • ezTrack</title>
+<title>ezTrack: an R Package with tools to enable exploration of animal movement data • ezTrack</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Easy Tools for Exploring Animal Tracking Data">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="ezTrack: an R Package with tools to enable exploration of animal movement data">
 <meta name="description" content="A lightweight and user-friendly toolkit for importing, cleaning, summarizing, analyzing, and mapping animal tracking data. Supports raw CSV or Excel input, calculates movement summaries and home ranges (MCP or KDE), and renders interactive Leaflet maps.">
 <meta property="og:description" content="A lightweight and user-friendly toolkit for importing, cleaning, summarizing, analyzing, and mapping animal tracking data. Supports raw CSV or Excel input, calculates movement summaries and home ranges (MCP or KDE), and renders interactive Leaflet maps.">
 </head>
@@ -59,30 +59,31 @@
 <hr>
 </div>
 <div class="section level2">
-<h2 id="key-functions">Key Functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
+<h2 id="key-functions">Key functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
 </h2>
 <div class="section level3">
 <h3 id="ez_track---clean--standardize-tracking-data">
-<code>ez_track()</code> - Clean &amp; Standardize Tracking Data<a class="anchor" aria-label="anchor" href="#ez_track---clean--standardize-tracking-data"></a>
+<code>ez_track()</code> - Clean &amp; standardize tracking data<a class="anchor" aria-label="anchor" href="#ez_track---clean--standardize-tracking-data"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">clean_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_track.html">ez_track</a></span><span class="op">(</span><span class="st">"my_tracking_file.csv"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tracking_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_track.html">ez_track</a></span><span class="op">(</span><span class="st">"my_tracking_file.csv"</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Auto-detects columns for <code>id</code>, <code>timestamp</code>, <code>x</code>, and <code>y</code>
 </li>
-<li>Supports CSV, Excel, shapefiles (.shp), GeoPackages (.gpkg), and GeoJSON files</li>
-<li>Also accepts data.frame, sf, and Spatial* objects</li>
+<li>Supports CSV, Excel, shapefiles (.shp), and GeoPackages (.gpkg) files</li>
+<li>Also accepts data.frame, sf, Spatial*, and move objects</li>
 <li>Removes rows with missing or duplicate (id, timestamp) combinations</li>
 <li>Returns a clean data frame or (optionally) a <code>sf</code> object projected to WGS84</li>
+<li>Supports time-based subsampling (e.g., “1 per hour”, “2 per day”)</li>
 </ul>
 <hr>
 </div>
 <div class="section level3">
 <h3 id="ez_summary---quick-data-summary">
-<code>ez_summary()</code> - Quick Data Summary<a class="anchor" aria-label="anchor" href="#ez_summary---quick-data-summary"></a>
+<code>ez_summary()</code> - Quick data summary<a class="anchor" aria-label="anchor" href="#ez_summary---quick-data-summary"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_summary.html">ez_summary</a></span><span class="op">(</span><span class="va">clean_data</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_summary.html">ez_summary</a></span><span class="op">(</span><span class="va">tracking_data</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Per-ID stats: duration, fixes/day, distance, speed</li>
 <li>Filters by date range</li>
@@ -92,11 +93,23 @@
 <hr>
 </div>
 <div class="section level3">
-<h3 id="ez_home_range---estimate-home-ranges">
-<code>ez_home_range()</code> - Estimate Home Ranges<a class="anchor" aria-label="anchor" href="#ez_home_range---estimate-home-ranges"></a>
+<h3 id="ez_fix_rate_plot---plot-location-fix-rate">
+<code>ez_fix_rate_plot()</code> - Plot location fix rate<a class="anchor" aria-label="anchor" href="#ez_fix_rate_plot---plot-location-fix-rate"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">clean_data</span>, method <span class="op">=</span> <span class="st">"mcp"</span>, level <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_fix_rate_plot.html">ez_fix_rate_plot</a></span><span class="op">(</span><span class="va">tracking_data</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Displays each animal’s location fixes as tick marks over time</li>
+<li>Helps visualize tracking effort, data gaps, and fix frequency</li>
+<li><h2 id="supports-date-filtering-and-x-axis-formatting-options">Supports date filtering and x-axis formatting options</h2></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="ez_home_range---estimate-home-ranges">
+<code>ez_home_range()</code> - Estimate home ranges<a class="anchor" aria-label="anchor" href="#ez_home_range---estimate-home-ranges"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">tracking_data</span>, method <span class="op">=</span> <span class="st">"mcp"</span>, level <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Supports <strong>MCP</strong> and <strong>KDE</strong> methods</li>
 <li>Returns <code>sf</code> polygon(s)</li>
@@ -105,11 +118,11 @@
 <hr>
 </div>
 <div class="section level3">
-<h3 id="ez_map---interactive-mapping-with-leaflet">
-<code>ez_map()</code> - Interactive Mapping with Leaflet<a class="anchor" aria-label="anchor" href="#ez_map---interactive-mapping-with-leaflet"></a>
+<h3 id="ez_map---plot-tracks-on-interactive-leaflet-maps">
+<code>ez_map()</code> - Plot tracks on interactive Leaflet maps<a class="anchor" aria-label="anchor" href="#ez_map---plot-tracks-on-interactive-leaflet-maps"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">clean_data</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">tracking_data</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Visualize tracks, points, and home ranges</li>
 <li>Customize colors, radius, opacity, and labels</li>
@@ -119,10 +132,10 @@
 </div>
 <div class="section level3">
 <h3 id="ez_latitude_plot---plot-latitude-over-time">
-<code>ez_latitude_plot()</code> - Plot Latitude Over Time<a class="anchor" aria-label="anchor" href="#ez_latitude_plot---plot-latitude-over-time"></a>
+<code>ez_latitude_plot()</code> - Plot latitude over time<a class="anchor" aria-label="anchor" href="#ez_latitude_plot---plot-latitude-over-time"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">clean_data</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">tracking_data</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Creates a time series plot of latitude (y-axis) over timestamp (x-axis)</li>
 <li>Optionally facets the plot by animal and allows customization of x-axis date format and break spacing</li>
@@ -133,7 +146,7 @@
 <div class="section level2">
 <h2 id="example-workflow">Example Workflow<a class="anchor" aria-label="anchor" href="#example-workflow"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/taylorbcraft/ezTrack" class="external-link">ezTrack</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1: Import</span></span>
@@ -145,13 +158,16 @@
 <span><span class="co"># Step 3: Summarize</span></span>
 <span><span class="fu"><a href="reference/ez_summary.html">ez_summary</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 4: Home Range</span></span>
+<span><span class="co"># Step 4: Check fix rates</span></span>
+<span><span class="fu"><a href="reference/ez_fix_rate_plot.html">ez_fix_rate_plot</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Step 5: Compute home ranges</span></span>
 <span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 5: Map It</span></span>
-<span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
+<span><span class="co"># Step 5: Map tracks and home ranges</span></span>
+<span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">trk</span>, home_ranges <span class="op">=</span> <span class="va">hr</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 6: Latitude Plot</span></span>
+<span><span class="co"># Step 6: Latitude plot</span></span>
 <span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -175,10 +191,10 @@
 <code>magrittr</code>: for <code>%&gt;%</code> pipe in mapping function</li>
 </ul>
 <p>Install missing packages using:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"sf"</span>, <span class="st">"leaflet"</span>, <span class="st">"geosphere"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"readxl"</span>,</span>
-<span>  <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>, <span class="st">"ggplot2"</span>, <span class="st">"viridisLite"</span>, <span class="st">"magrittr"</span></span>
+<span>  <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>, <span class="st">"ggplot2"</span>, <span class="st">"viridisLite"</span>, <span class="st">"magrittr"</span>, <span class="st">"dplyr"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>

@@ -6,6 +6,7 @@
 <url><loc>/articles/index.html</loc></url>
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
+<url><loc>/reference/ez_fix_rate_plot.html</loc></url>
 <url><loc>/reference/ez_home_range.html</loc></url>
 <url><loc>/reference/ez_latitude_plot.html</loc></url>
 <url><loc>/reference/ez_map.html</loc></url>
@@ -13,5 +14,6 @@
 <url><loc>/reference/ez_track.html</loc></url>
 <url><loc>/reference/godwit_tracks.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/pipe.html</loc></url>
 </urlset>
 

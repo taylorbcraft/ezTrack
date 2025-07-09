@@ -20,26 +20,27 @@ library(ezTrack)
 
 ## Introduction
 
-This vignette demonstrates a full workflow using ezTrack. It imports tracking data with non-standard column names, cleans, standardizes, and converts it to a Spatial Feature, computes a summary table of the tracking data, and plots the tracks and home ranges on an interactive map, and plots the latitudes over time.
+This vignette demonstrates a full ezTrack workflow: importing tracking data with non-standard column names, cleaning and standardizing it, converting it to a spatial object, generating summary tables, visualizing fix rates and latitude over time, and plotting tracks and home ranges on an interactive map.
 
-## 1. Format Tracking Data
+## 1. Import and format tracking data
 
 We pass a dataset of GPS-tagged migratory shorebirds to `ez_track()`. If column names aren't provided, `ez_track()` will automatically attempt to guess which columns correspond to ID, timestamp, longitude, and latitude.
 
-If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
 
 ```{r}
 data(godwit_tracks)
 head(godwit_tracks)
 
 tracks <- ez_track(
-  data = godwit_tracks,
-  as_sf = TRUE
+  data = godwit_tracks
 )
+```
 
+If automatic column guessing fails or guesses incorrectly, you can manually specify which columns represent the ID, timestamp, longitude, and latitude.
+
+```{r}
 tracks_manual <- ez_track(
   data = godwit_tracks,
-  as_sf = TRUE,
   id_col = 'individual.local.identifier',
   time_col = 'timestamp',
   x_col = 'location.long',
@@ -47,9 +48,18 @@ tracks_manual <- ez_track(
 )
 ```
 
-## 2. Tracking Data Summary Reports
+You can also subsample the dataset using the `subsample()` argument, which limits the number of location fixes per time unit. Use a simple string format such as "1 per hour" or "2 per day" to control the sampling frequency.
 
-Summary statistics can be computed for each individual using `ez_summary()`. For easy use in reports or presentations, HTML reports can be generated using `report = TRUE`. Summaries can also be filtered by date using the `startDate` and `endDate` arguments.
+```{r}
+tracks_subsampled <- ez_track(
+  data = godwit_tracks,
+  subsample = "2 per hour"
+)
+```
+
+## 2. Tracking data summary reports
+
+Summary reports can be computed for each individual using `ez_summary()`. For easy use in reports or presentations, HTML reports can be generated using `report = TRUE`. Summaries can also be filtered by date using the `start_date` and `end_date` arguments.
 
 The following summary statistics are returned for each unique id:
 
@@ -68,40 +78,7 @@ summary_table <- ez_summary(tracks)
 summary_table
 ```
 
-## 3. Visualize Tracks on an Interactive Map
-
-We can display the movement tracks using an interactive Leaflet map with `ez_map()` with a simple command.
-
-```{r}
-ez_map(tracks)
-```
-
-As well as with date range filters.
-
-```{r}
-ez_map(tracks,
-  startDate = "2025-04-10",
-  endDate = "2025-04-28")
-
-```
-
-## 4. Estimate Home Ranges
-
-Individual or population-level Minimum Convex Polygons (MCP) or Kernel Density Estimate (KDE) home ranges can be created with `ez_home_range()`.
-
-```{r}
-home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 95, startDate = '2025-04-12')
-
-```
-
-The result is an `sf` object containing one home range polygon per tracked individual or population (if `population = TRUE`).
-
-Home ranges can be vizualised with `ez_map`:
-
-```{r}
-ez_map(home_ranges_mcp, homeRangeColor = 'id')
-```
-## 5. Visualize Latitude Over Time
+## 3. Visualize latitude over time
 
 `ez_latitude_plot()` can be used to visualize latitudinal movement (north-south) over time for each tracked animal. 
 
@@ -121,24 +98,79 @@ The plot supports:
 - `ggplot2` parameters for further customization.
 
 
-```{r, fig.width=15, fig.height=10}
+```{r}
 ez_latitude_plot(
   tracks,
   facet = TRUE,
-  startDate = "2025-01-01",
-  endDate = "2025-04-28",
-  date_breaks = "1 month",
+  start_date = "2025-01-01",
+  end_date = "2025-04-28",
+  date_breaks = "2 months",
   date_format = "%b"
-) +
-  ggplot2::theme(
-  text = ggplot2::element_text(size = 18),
-  axis.title = ggplot2::element_text(size = 20),
-  axis.text = ggplot2::element_text(size = 18),
 )
 ```
 
+## 4. Visualize fix rate over time
 
-## Developer Notes
-# To update vignette pkgdown site:
+`ez_fix_rate_plot()` can be used to visualize fix rates over time for each tracked animal, using a tick mark to represent each location fix. 
+
+
+```{r}
+ez_fix_rate_plot(tracks)
+```
+
+The plot supports:
+
+- Date axis customization
+
+- Date range filtering
+
+- `ggplot2` parameters for further customization.
+
+
+## 5. Map tracks and home ranges
+
+We can display tracks using an interactive Leaflet map with `ez_map()` with a simple command.
+
+```{r}
+ez_map(tracks)
+```
+
+As well as with date range filters and a variety of style arguments.
+
+```{r}
+ez_map(tracks,
+  start_date = "2025-04-10",
+  end_date = "2025-04-28",
+  point_color = "timestamp",
+  point_size = 2,
+  path_opacity = 0.3)
+
+```
+
+## 6. Estimate home ranges
+
+Individual or population-level Minimum Convex Polygons (MCP) or Kernel Density Estimate (KDE) home ranges can be created with `ez_home_range()`.
+
+```{r}
+home_ranges_mcp <- ez_home_range(tracks, method = 'mcp', level = 95, start_date = '2025-04-12')
+
+```
+
+The result is an `sf` object containing one home range polygon per tracked individual or population (if `population = TRUE`).
+
+Home ranges can be visualized with `ez_map`.
+
+```{r}
+ez_map(home_ranges = home_ranges_mcp)
+```
+
+Home ranges can also be mapped alongside tracking data. In this example, we use the start_date argument to ensure the tracking data aligns temporally with the home range period.
+
+```{r}
+ez_map(tracks, home_ranges = home_ranges_mcp, start_date = '2025-04-12')
+```
+
+## Developer notes
+To update vignette pkgdown site:
 pkgdown::build_site()
 

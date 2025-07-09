@@ -2,65 +2,86 @@
 % Please edit documentation in R/ez_map.R
 \name{ez_map}
 \alias{ez_map}
-\title{Interactive Map of Tracking Data}
+\title{Plot Tracking Data and Home Ranges Together}
 \usage{
 ez_map(
-  data,
-  plotPath = TRUE,
-  plotPoints = TRUE,
-  pointRadius = 4,
-  pointColor = "blue",
-  pointOpacity = 0.8,
-  pointStroke = TRUE,
-  pointStrokeColor = "black",
-  pathColor = "blue",
-  pathWidth = 2,
-  pathOpacity = 1,
-  homeRangeColor = "blue",
-  colorPalette = "viridis",
-  showLabels = TRUE,
-  startDate = NULL,
-  endDate = NULL
+  tracks = NULL,
+  home_ranges = NULL,
+  individual = NULL,
+  show_points = TRUE,
+  show_paths = TRUE,
+  point_color = "id",
+  point_size = 4,
+  point_opacity = 0.8,
+  point_stroke = TRUE,
+  point_stroke_color = "black",
+  path_color = "id",
+  path_width = 2,
+  path_opacity = 1,
+  polygon_color = "id",
+  polygon_opacity = 0.4,
+  color_palette = "viridis",
+  show_labels = TRUE,
+  start_date = NULL,
+  end_date = NULL
 )
 }
 \arguments{
-\item{data}{A data frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`.}
+\item{tracks}{Output from `ez_track()` — a data frame or `sf` with `id`, `timestamp`, `x`, `y`.}
 
-\item{plotPath}{Logical, whether to draw path lines. Default is TRUE.}
+\item{home_ranges}{Output from `ez_home_range()` — an `sf` polygon object.}
 
-\item{plotPoints}{Logical, whether to draw points. Default is TRUE.}
+\item{individual}{Optional. Character or character vector of individual ID(s) to display.}
 
-\item{pointRadius}{Numeric, size of point markers. Default is 4.}
+\item{show_points}{Logical, whether to draw individual locations. Default TRUE.}
 
-\item{pointColor}{CSS color string or column name to color points. Default is `"id"`.}
+\item{show_paths}{Logical, whether to draw movement paths. Default TRUE.}
 
-\item{pointOpacity}{Numeric (0–1), fill opacity for points. Default is 0.8.}
+\item{point_color}{Column name or static color for points. Default "id". Can also be "timestamp" for temporal gradient.}
 
-\item{pointStroke}{Logical, whether to draw borders around points. Default is TRUE.}
+\item{point_size}{Radius of point markers. Default 4.}
 
-\item{pointStrokeColor}{Border color for points. Default is "black".}
+\item{point_opacity}{Fill opacity of points. Default 0.8.}
 
-\item{pathColor}{CSS color string or column name to color paths. Default is `"id"`.}
+\item{point_stroke}{Logical, whether to draw point borders. Default TRUE.}
 
-\item{pathWidth}{Line width of paths. Default is 2.}
+\item{point_stroke_color}{Border color for points. Default "black".}
 
-\item{pathOpacity}{Numeric (0–1), opacity of paths. Default is 1.}
+\item{path_color}{Column name or static color for paths. Default "id".}
 
-\item{homeRangeColor}{CSS color string or column name to color polygon geometries. Default is "blue".}
+\item{path_width}{Line width of movement paths. Default 2.}
 
-\item{colorPalette}{Palette to use if coloring by `id` or another column. Supports "viridis", "plasma", "inferno", "magma", "cividis", "turbo", or "Set1". Default is "viridis".}
+\item{path_opacity}{Opacity of path lines. Default 1.}
 
-\item{showLabels}{Logical, show ID + timestamp in hover labels. Default is TRUE.}
+\item{polygon_color}{Column name or static color for home range polygons. Default "id".}
 
-\item{startDate}{Optional. A `Date` object or a date string (e.g., "2021-01-01").}
+\item{polygon_opacity}{Fill opacity of polygons. Default 0.4.}
 
-\item{endDate}{Optional. A `Date` object or a date string (e.g., "2021-12-31").}
+\item{color_palette}{Color palette to use for all mapped variables. Default "viridis".}
+
+\item{show_labels}{Logical, whether to show hover labels for locations. Default TRUE.}
+
+\item{start_date}{Optional filter (Date or string) to remove data before this date.}
+
+\item{end_date}{Optional filter (Date or string) to remove data after this date.}
 }
 \value{
 A `leaflet` map object.
 }
 \description{
-Display animal tracks on an interactive Leaflet map with intuitive styling arguments.
-Optionally subset the data by a start and end date. Supports plotting tracks (lines and points)
-and home ranges (POLYGON or MULTIPOLYGON). By default, points and paths are colored by `id`.
+A unified function for visualizing tracking data and home range polygons on an interactive map.
+Accepts tracking points (from `ez_track`) and home ranges (from `ez_home_range`), and
+allows layer-specific customization of appearance and filtering by time.
+}
+\examples{
+# Simulate tracks
+tracks <- data.frame(
+  id = rep(c("A", "B"), each = 10),
+  timestamp = rep(seq.POSIXt(as.POSIXct("2023-01-01"), by = "1 day", length.out = 10), 2),
+  x = c(runif(10, -1, 1), runif(10, 0, 2)),
+  y = c(runif(10, 51, 52), runif(10, 51.5, 52.5))
+)
+
+# Plot map
+ez_map(tracks, point_color = "timestamp")
 }

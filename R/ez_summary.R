@@ -16,8 +16,8 @@
 #'
 #' @param data A data frame or sf object with columns `id`, `timestamp`, `x`, and `y`.
 #' @param report Logical. If TRUE, opens an HTML summary table in your browser for easy copying into slides or documents.
-#' @param startDate Optional. A `Date` object or string (e.g., "2021-01-01"). Filters out data before this date.
-#' @param endDate Optional. A `Date` object or string (e.g., "2021-01-15"). Filters out data after this date.
+#' @param start_date Optional. A `Date` object or string (e.g., "2021-01-01"). Filters out data before this date.
+#' @param end_date Optional. A `Date` object or string (e.g., "2021-01-15"). Filters out data after this date.
 #'
 #' @return A data frame with summary statistics per `id`, or an HTML table if `report = TRUE`.
 #' @export
@@ -27,7 +27,7 @@
 #' clean <- ez_track(godwit_tracks)
 #' ez_summary(clean)
 
-ez_summary <- function(data, startDate = NULL, endDate = NULL, report = FALSE) {
+ez_summary <- function(data, start_date = NULL, end_date = NULL, report = FALSE) {
   if (!requireNamespace("geosphere", quietly = TRUE)) {
     stop("The 'geosphere' package is required for ez_summary(). Please install it.")
   }
@@ -42,14 +42,14 @@ ez_summary <- function(data, startDate = NULL, endDate = NULL, report = FALSE) {
 
   data <- data[order(data$id, data$timestamp), ]
 
-  if (!is.null(startDate)) {
-    if (inherits(startDate, "character")) startDate <- as.Date(startDate)
-    data <- data[data$timestamp >= as.POSIXct(startDate), ]
+  if (!is.null(start_date)) {
+    if (inherits(start_date, "character")) start_date <- as.Date(start_date)
+    data <- data[data$timestamp >= as.POSIXct(start_date), ]
   }
 
-  if (!is.null(endDate)) {
-    if (inherits(endDate, "character")) endDate <- as.Date(endDate)
-    data <- data[data$timestamp <= as.POSIXct(endDate + 1) - 1, ]
+  if (!is.null(end_date)) {
+    if (inherits(end_date, "character")) end_date <- as.Date(end_date)
+    data <- data[data$timestamp <= as.POSIXct(end_date + 1) - 1, ]
   }
 
   summary_list <- lapply(split(data, data$id), function(track) {

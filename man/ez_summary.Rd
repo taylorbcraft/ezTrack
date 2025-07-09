@@ -4,14 +4,14 @@
 \alias{ez_summary}
 \title{Summarize Animal Tracking Data}
 \usage{
-ez_summary(data, startDate = NULL, endDate = NULL, report = FALSE)
+ez_summary(data, start_date = NULL, end_date = NULL, report = FALSE)
 }
 \arguments{
 \item{data}{A data frame or sf object with columns `id`, `timestamp`, `x`, and `y`.}
 
-\item{startDate}{Optional. A `Date` object or string (e.g., "2021-01-01"). Filters out data before this date.}
+\item{start_date}{Optional. A `Date` object or string (e.g., "2021-01-01"). Filters out data before this date.}
 
-\item{endDate}{Optional. A `Date` object or string (e.g., "2021-01-15"). Filters out data after this date.}
+\item{end_date}{Optional. A `Date` object or string (e.g., "2021-01-15"). Filters out data after this date.}
 
 \item{report}{Logical. If TRUE, opens an HTML summary table in your browser for easy copying into slides or documents.}
 }

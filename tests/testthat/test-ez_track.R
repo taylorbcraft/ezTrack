@@ -53,3 +53,25 @@ test_that("ez_track transforms to sf when as_sf = TRUE", {
   expect_s3_class(result, "sf")
   expect_true("geometry" %in% names(result))
 })
+
+test_that("ez_track errors on unsupported formats (kml, kmz, json, geojson)", {
+  dummy <- function(ext) {
+    f <- tempfile(fileext = paste0(".", ext))
+    file.create(f)
+    f
+  }
+
+  files <- c(
+    kml = dummy("kml"),
+    kmz = dummy("kmz"),
+    json = dummy("json"),
+    geojson = dummy("geojson")
+  )
+
+  expect_error(ez_track(files["kml"]), "Unsupported file format")
+  expect_error(ez_track(files["kmz"]), "Unsupported file format")
+  expect_error(ez_track(files["json"]), "Unsupported file format")
+  expect_error(ez_track(files["geojson"]), "Unsupported file format")
+
+  unlink(files)
+})

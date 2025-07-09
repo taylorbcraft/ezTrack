@@ -17,21 +17,22 @@ devtools::install_github("taylorbcraft/ezTrack")
 
 ---
 
-## Key Functions
+## Key functions
 
-### `ez_track()` - Clean & Standardize Tracking Data
+### `ez_track()` - Clean & standardize tracking data
 ```r
 tracking_data <- ez_track("my_tracking_file.csv")
 ```
 - Auto-detects columns for `id`, `timestamp`, `x`, and `y`
-- Supports CSV, Excel, shapefiles (.shp), GeoPackages (.gpkg), and GeoJSON files
-- Also accepts data.frame, sf, and Spatial* objects
+- Supports CSV, Excel, shapefiles (.shp), and GeoPackages (.gpkg) files
+- Also accepts data.frame, sf, Spatial*, and move objects
 - Removes rows with missing or duplicate (id, timestamp) combinations
 - Returns a clean data frame or (optionally) a `sf` object projected to WGS84
+- Supports time-based subsampling (e.g., "1 per hour", "2 per day") 
 
 ---
 
-### `ez_summary()` - Quick Data Summary
+### `ez_summary()` - Quick data summary
 ```r
 ez_summary(tracking_data)
 ```
@@ -41,7 +42,16 @@ ez_summary(tracking_data)
 
 ---
 
-### `ez_home_range()` - Estimate Home Ranges
+### `ez_fix_rate_plot()` - Plot location fix rate
+```r
+ez_fix_rate_plot(tracking_data)
+```
+- Displays each animal’s location fixes as tick marks over time
+- Helps visualize tracking effort, data gaps, and fix frequency
+- Supports date filtering and x-axis formatting options
+---
+
+### `ez_home_range()` - Estimate home ranges
 ```r
 ranges <- ez_home_range(tracking_data, method = "mcp", level = 95)
 ```
@@ -51,7 +61,7 @@ ranges <- ez_home_range(tracking_data, method = "mcp", level = 95)
 
 ---
 
-### `ez_map()` - Interactive Mapping with Leaflet
+### `ez_map()` - Plot tracks on interactive Leaflet maps
 ```r
 ez_map(tracking_data)
 ```
@@ -61,7 +71,7 @@ ez_map(tracking_data)
 
 ---
 
-### `ez_latitude_plot()` - Plot Latitude Over Time
+### `ez_latitude_plot()` - Plot latitude over time
 ```r
 ez_latitude_plot(tracking_data)
 ```
@@ -83,13 +93,16 @@ trk <- ez_track(godwit_tracks)
 # Step 3: Summarize
 ez_summary(trk)
 
-# Step 4: Home Range
+# Step 4: Check fix rates
+ez_fix_rate_plot(trk)
+
+# Step 5: Compute home ranges
 hr <- ez_home_range(trk)
 
-# Step 5: Map It
-ez_map(trk)
+# Step 5: Map tracks and home ranges
+ez_map(trk, home_ranges = hr)
 
-# Step 6: Latitude Plot
+# Step 6: Latitude plot
 ez_latitude_plot(trk)
 ```
 
@@ -107,7 +120,7 @@ Install missing packages using:
 ```r
 install.packages(c(
   "sf", "leaflet", "geosphere", "adehabitatHR", "readxl",
-  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", "magrittr"
+  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", "magrittr", "dplyr"
 ))
 ```
 
