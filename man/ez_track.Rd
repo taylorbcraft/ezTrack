@@ -15,8 +15,8 @@ ez_track(
   x = NULL,
   y = NULL,
   keep_original_cols = TRUE,
-  verbose = TRUE,
   subsample = "none",
+  verbose = TRUE,
   ...
 )
 }
@@ -31,13 +31,19 @@ ez_track(
 
 \item{as_sf}{Logical. Return an `sf` object? Default is TRUE.}
 
-\item{id, }{timestamp, x, y Optional. Column names for id, timestamp, and coordinates.}
+\item{id}{Optional. Column name for id.}
+
+\item{timestamp}{Optional. Column name timestamp.}
+
+\item{x}{Optional. Column name for longitude.}
+
+\item{y}{Optional. Column name for latitude.}
 
 \item{keep_original_cols}{Logical. If FALSE, drops non-standard columns and only retains `id`, `timestamp`, `x`, and `y`. Default is TRUE.}
 
-\item{verbose}{Logical. Print messages? Default is TRUE.}
+\item{subsample}{Optional. Specify how many fixes to keep per time unit. You can use any positive integer and `"hour"` or `"day"` as the unit  (e.g.,`"1 per hour"` or `"2 per day"`).}
 
-\item{subsample}{Optional. Format: `"1 per hour"` or `"2 per day"`. Subsamples by time bin. Use `"none"` to disable.}
+\item{verbose}{Logical. Print messages? Default is TRUE.}
 
 \item{...}{Passed to the read function.}
 }

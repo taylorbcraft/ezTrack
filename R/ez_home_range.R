@@ -4,17 +4,27 @@
 #'
 #' @param data A data frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`.
 #' @param method Method for home range estimation. One of `"mcp"` (default) or `"kde"`.
-#' @param level Percentage of points to include in the home range (e.g., 95 for 95%). Default is 95.
+#' @param level Percentage of points to include in the home range (e.g., 95 for 95\%). Default is 95.
 #' @param crs Optional CRS to project the data before calculation. If NULL, uses EPSG:3857 (Web Mercator).
 #' @param population Logical. If TRUE, returns a single home range polygon for all data combined.
 #' @param start_date Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data before this date.
 #' @param end_date Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data after this date.
-#' @param kde_extent Numeric. Passed to `adehabitatHR::kernelUD()` to control the extent of the grid for KDE. Default is 1.
+#' @param kde_extent Numeric. When method = "kde", passed to `adehabitatHR::kernelUD()` to control the extent of the grid for KDE. Default is 1.
+#' @param h Bandwidth method when method = "kde". One of `"href"` (default), "LSCV", or a numeric value.
+#' @param hlim Optional vector of length 2 passed to `adehabitatHR::kernelUD()` when method = "kde" to constrain the bandwidth search (used with h = "LSCV").
 #'
 #' @return An `sf` object of home range polygon(s).
 #' @export
-ez_home_range <- function(data, method = "mcp", level = 95, crs = NULL, population = FALSE,
-                          start_date = NULL, end_date = NULL, kde_extent = 1) {
+ez_home_range <- function(data,
+                          method = "mcp",
+                          level = 95,
+                          crs = NULL,
+                          population = FALSE,
+                          start_date = NULL,
+                          end_date = NULL,
+                          kde_extent = 1,
+                          h = "href",
+                          hlim = NULL) {
 
   # Load required packages
   if (!requireNamespace("sf", quietly = TRUE)) stop("Please install the 'sf' package.")
@@ -78,7 +88,18 @@ ez_home_range <- function(data, method = "mcp", level = 95, crs = NULL, populati
 
   # ---- KDE Method ----
   if (method == "kde") {
-    kde_ud <- adehabitatHR::kernelUD(sp_points, h = "href", same4all = population, extent = kde_extent)
+    # Assemble args for kernelUD
+    kernel_args <- list(
+      x = sp_points,
+      h = h,
+      same4all = population,
+      extent = kde_extent
+    )
+    if (!is.null(hlim)) {
+      kernel_args$hlim <- hlim
+    }
+
+    kde_ud <- do.call(adehabitatHR::kernelUD, kernel_args)
     kde_result <- adehabitatHR::getverticeshr(kde_ud, percent = level)
     kde_sf <- sf::st_as_sf(kde_result)
     names(kde_sf)[1] <- "id"

@@ -12,7 +12,9 @@ ez_home_range(
   population = FALSE,
   start_date = NULL,
   end_date = NULL,
-  kde_extent = 1
+  kde_extent = 1,
+  h = "href",
+  hlim = NULL
 )
 }
 \arguments{
@@ -20,7 +22,7 @@ ez_home_range(
 
 \item{method}{Method for home range estimation. One of `"mcp"` (default) or `"kde"`.}
 
-\item{level}{Percentage of points to include in the home range (e.g., 95 for 95%). Default is 95.}
+\item{level}{Percentage of points to include in the home range (e.g., 95 for 95\%). Default is 95.}
 
 \item{crs}{Optional CRS to project the data before calculation. If NULL, uses EPSG:3857 (Web Mercator).}
 
@@ -30,7 +32,11 @@ ez_home_range(
 
 \item{end_date}{Optional. A `Date` object or string ("YYYY-MM-DD"). Filters out data after this date.}
 
-\item{kde_extent}{Numeric. Passed to `adehabitatHR::kernelUD()` to control the extent of the grid for KDE. Default is 1.}
+\item{kde_extent}{Numeric. When method = "kde", passed to `adehabitatHR::kernelUD()` to control the extent of the grid for KDE. Default is 1.}
+
+\item{h}{Bandwidth method when method = "kde". One of `"href"` (default), "LSCV", or a numeric value.}
+
+\item{hlim}{Optional vector of length 2 passed to `adehabitatHR::kernelUD()` when method = "kde" to constrain the bandwidth search (used with h = "LSCV").}
 }
 \value{
 An `sf` object of home range polygon(s).

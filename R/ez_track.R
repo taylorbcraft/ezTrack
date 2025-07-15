@@ -11,11 +11,14 @@
 #'
 #' @param data A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or path to CSV, XLSX, SHP, or GPKG.
 #' @param format Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg".
-#' @param subsample Optional. Format: `"1 per hour"` or `"2 per day"`. Subsamples by time bin. Use `"none"` to disable.
+#' @param subsample Optional. Specify how many fixes to keep per time unit. You can use any positive integer and `"hour"` or `"day"` as the unit  (e.g.,`"1 per hour"` or `"2 per day"`).
 #' @param tz Timezone for timestamps. Default is "UTC".
 #' @param crs EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).
 #' @param as_sf Logical. Return an `sf` object? Default is TRUE.
-#' @param id, timestamp, x, y Optional. Column names for id, timestamp, and coordinates.
+#' @param id Optional. Column name for id.
+#' @param timestamp Optional. Column name timestamp.
+#' @param x Optional. Column name for longitude.
+#' @param y Optional. Column name for latitude.
 #' @param keep_original_cols Logical. If FALSE, drops non-standard columns and only retains `id`, `timestamp`, `x`, and `y`. Default is TRUE.
 #' @param verbose Logical. Print messages? Default is TRUE.
 #' @param ... Passed to the read function.
@@ -33,8 +36,8 @@ ez_track <- function(data,
                      x = NULL,
                      y = NULL,
                      keep_original_cols = TRUE,
-                     verbose = TRUE,
                      subsample = "none",
+                     verbose = TRUE,
                      ...) {
 
   # Null coalescing helper
@@ -91,7 +94,7 @@ ez_track <- function(data,
 
   # Define likely column name patterns for automated detection
   id_patterns        <- c("^id$", "individual", "individual_id", "track", "tag_id", "device", "name")
-  timestamp_patterns <- c("timestamp", "datetime", "time", "date")
+  timestamp_patterns <- c("timestamp", "datetime", "time", "date", "dt")
   x_patterns         <- c("^x$", "longitude", "lon", "location_long", "utm_e", "easting")
   y_patterns         <- c("^y$", "latitude", "lat", "location_lat", "utm_n", "northing")
 

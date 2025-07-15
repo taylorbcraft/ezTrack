@@ -6,8 +6,8 @@
 \usage{
 ez_fix_rate_plot(
   data,
-  date_breaks = "1 month",
-  date_format = "\%d \%b \%Y",
+  date_breaks = NULL,
+  date_format = NULL,
   start_date = NULL,
   end_date = NULL
 )
@@ -15,20 +15,20 @@ ez_fix_rate_plot(
 \arguments{
 \item{data}{A data frame or `sf` object with columns `id` and `timestamp`.}
 
-\item{date_breaks}{Optional. Interval between x-axis breaks (e.g., "1 month", "2 weeks"). Default is "1 month".}
+\item{date_breaks}{Optional. Spacing of x-axis breaks (e.g., `"1 month"`, `"2 weeks"`). If `NULL`, ggplot2 chooses automatically.}
 
-\item{date_format}{Optional. Date label format (e.g., "\%b \%Y", "\%d-\%m"). Default is "\%d \%b \%Y".}
+\item{date_format}{Optional. Format string for x-axis date labels (e.g., "\%b \%Y", "\%d-\%m"). If `NULL`, ggplot2 chooses automatically.}
 
-\item{start_date}{Optional. A `Date` or string (e.g., "2024-01-01"). Filters out fixes before this date.}
+\item{start_date}{Optional. A `Date` or string (e.g., `"2024-01-01"`). Filters out fixes before this date.}
 
-\item{end_date}{Optional. A `Date` or string (e.g., "2024-12-31"). Filters out fixes after this date.}
+\item{end_date}{Optional. A `Date` or string (e.g., `"2024-12-31"`). Filters out fixes after this date.}
 }
 \value{
-A ggplot object.
+A `ggplot` object showing fix timelines per individual.
 }
 \description{
-Shows each individual's fix events as horizontal dot segments over time,
-allowing quick assessment of fix density, coverage gaps, and tracking effort.
+Creates a timeline plot showing fix events as horizontal tick marks for each individual.
+This allows a quick visual assessment of tracking effort, fix density, and coverage gaps.
 }
 \examples{
 df <- data.frame(

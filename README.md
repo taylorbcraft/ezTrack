@@ -38,7 +38,7 @@ ez_summary(tracking_data)
 ```
 - Per-ID stats: duration, fixes/day, distance, speed
 - Filters by date range
-- Optional HTML report: `ez_summary(data, report = TRUE)`
+- Optional HTML report: `ez_summary(tracking_data, report = TRUE)`
 
 ---
 
