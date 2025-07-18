@@ -1,16 +1,13 @@
 Package: ezTrack
 Type: Package
-Title: ezTrack: an R Package with tools to enable exploration of animal movement data
+Title: Tools for exploring animal movement data
 Version: 0.1.0
 Authors@R: 
     person(given = "Taylor", 
            family = "Craft", 
-           email = "taylor.b.craft2@gmail.com", 
+           email = "taylor.craft.mail@gmail.com", 
            role = c("aut", "cre"))
-Description: A lightweight and user-friendly toolkit for importing, cleaning, summarizing,
-    analyzing, and mapping animal tracking data. Supports raw CSV or Excel input,
-    calculates movement summaries and home ranges (MCP or KDE), and renders
-    interactive Leaflet maps.
+Description: Provides tools for exploring animal tracking data, from raw telemetry points to summaries, interactive maps, and home range estimates. It is designed to be beginner-friendly and requires minimal data wrangling.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -30,11 +27,11 @@ Imports:
     ggplot2,
     readxl,
     kableExtra,
-    viridisLite,
     dplyr
 VignetteBuilder: knitr
 Suggests:
     knitr,
+    viridisLite,
     rmarkdown
 BugReports: https://github.com/taylorbcraft/ezTrack/issues
 URL: https://github.com/taylorbcraft/ezTrack
