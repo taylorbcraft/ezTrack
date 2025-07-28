@@ -1,5 +1,7 @@
 # ezTrack
 
+[![R-CMD-check](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml)
+
 **ezTrack** is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling.
 
 [View the vignette](https://taylorbcraft.github.io/ezTrack/articles/getting-started.html)
@@ -99,10 +101,10 @@ ez_fix_rate_plot(trk)
 # Step 5: Compute home ranges
 hr <- ez_home_range(trk)
 
-# Step 5: Map tracks and home ranges
+# Step 6: Map tracks and home ranges
 ez_map(trk, home_ranges = hr)
 
-# Step 6: Latitude plot
+# Step 7: Latitude plot
 ez_latitude_plot(trk)
 ```
 
