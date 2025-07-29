@@ -1,6 +1,6 @@
 Package: ezTrack
 Type: Package
-Title: Tools for exploring animal movement data
+Title: Tools for Exploring Animal Movement Data
 Version: 0.1.0
 Authors@R: 
     person(given = "Taylor", 
