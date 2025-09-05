@@ -27,9 +27,9 @@ tracking_data <- ez_track("my_tracking_file.csv")
 ```
 - Auto-detects columns for `id`, `timestamp`, `x`, and `y`
 - Supports CSV, Excel, shapefiles (.shp), and GeoPackages (.gpkg) files
-- Also accepts data.frame, sf, Spatial*, and move objects
+- Also accepts data.frame, sf, and sp objects
 - Removes rows with missing or duplicate (id, timestamp) combinations
-- Returns a clean data frame or (optionally) a `sf` object projected to WGS84
+- Returns a clean data frame or (optionally) an `sf` object projected to WGS84
 - Supports time-based subsampling (e.g., "1 per hour", "2 per day") 
 
 ---
@@ -122,7 +122,8 @@ Install missing packages using:
 ```r
 install.packages(c(
   "sf", "leaflet", "geosphere", "adehabitatHR", "readxl",
-  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", "magrittr", "dplyr"
+  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", 
+  "magrittr", "dplyr"
 ))
 ```
 
