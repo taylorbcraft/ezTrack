@@ -2,7 +2,7 @@
 
 [![R-CMD-check](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml)
 
-**ezTrack** is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling.
+**ezTrack** is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling. By combining data cleaning, visualization, and basic analysis in a single workflow, ezTrack lowers the barrier for students, researchers, and conservation practitioners to quickly extract ecological insight without extensive programming expertise.
 
 [View the vignette](https://taylorbcraft.github.io/ezTrack/articles/getting-started.html)
 
