@@ -1,7 +1,7 @@
-#' Create a Clean Tracking Object
+#' Create a clean tracking object
 #'
 #' Imports and standardizes tracking data into a tidy format with columns: `id`, `timestamp`, `x`, and `y`.
-#' Supports input as data frames, `sf`, `Spatial*` objects, or file paths to CSV, Excel, Shapefiles, and GeoPackages.
+#' Supports input as data frames, `sf`, `sp` objects, or file paths to csv, xlsx, shp, and gpkg.
 #' Optionally returns a spatial object projected to WGS84 (EPSG:4326), and supports subsampling (e.g., "1 per hour").
 #'
 #' @importFrom methods as
@@ -9,7 +9,7 @@
 #' @importFrom utils read.csv
 #' @importFrom dplyr group_by arrange slice_head ungroup select as_tibble
 #'
-#' @param data A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or path to CSV, XLSX, SHP, or GPKG.
+#' @param data A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `sp`, or path to "csv", "xlsx", "shp", or "gpkg".
 #' @param format Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg".
 #' @param subsample Optional. Specify how many fixes to keep per time unit. You can use any positive integer and `"hour"` or `"day"` as the unit  (e.g.,`"1 per hour"` or `"2 per day"`).
 #' @param tz Timezone for timestamps. Default is "UTC".

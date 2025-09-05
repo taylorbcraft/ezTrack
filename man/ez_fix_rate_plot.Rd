@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_fix_rate_plot.R
 \name{ez_fix_rate_plot}
 \alias{ez_fix_rate_plot}
-\title{Plot Fix Rate Timelines for Each Individual}
+\title{Plot fix rate timelines}
 \usage{
 ez_fix_rate_plot(
   data,

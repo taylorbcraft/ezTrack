@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_latitude_plot.R
 \name{ez_latitude_plot}
 \alias{ez_latitude_plot}
-\title{Plot Latitude Over Time}
+\title{Plot latitude over time}
 \usage{
 ez_latitude_plot(
   data,
@@ -33,5 +33,5 @@ ez_latitude_plot(
 A ggplot object.
 }
 \description{
-Creates a time series plot of latitude (y-axis) over timestamp (x-axis), with separate lines for each individual animal. Optionally facets the plot by animal and allows customization of x-axis date format and break spacing.
+Creates a time series plot of latitude (y-axis) over time (x-axis), with separate lines for each individual animal. Optionally facets the plot by animal and allows customization of x-axis date format and break spacing.
 }

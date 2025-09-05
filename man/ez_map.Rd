@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_map.R
 \name{ez_map}
 \alias{ez_map}
-\title{Plot Tracking Data and Home Ranges Together}
+\title{Plot tracking data and home ranges}
 \usage{
 ez_map(
   tracks = NULL,
@@ -29,7 +29,7 @@ ez_map(
 \arguments{
 \item{tracks}{Output from `ez_track()` — a data frame or `sf` with `id`, `timestamp`, `x`, `y`.}
 
-\item{home_ranges}{Output from `ez_home_range()` — an `sf` polygon object.}
+\item{home_ranges}{Output from `ez_home_range()` or any `sf` polygon object.}
 
 \item{individual}{Optional. Character or character vector of individual ID(s) to display.}
 

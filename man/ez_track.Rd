@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_track.R
 \name{ez_track}
 \alias{ez_track}
-\title{Create a Clean Tracking Object}
+\title{Create a clean tracking object}
 \usage{
 ez_track(
   data,
@@ -21,7 +21,7 @@ ez_track(
 )
 }
 \arguments{
-\item{data}{A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `Spatial*`, or path to CSV, XLSX, SHP, or GPKG.}
+\item{data}{A tracking dataset or file path. Accepted types: `data.frame`, `sf`, `sp`, or path to "csv", "xlsx", "shp", or "gpkg".}
 
 \item{format}{Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg".}
 
@@ -52,6 +52,6 @@ A data.frame or `sf` object with columns `id`, `timestamp`, `x`, `y`.
 }
 \description{
 Imports and standardizes tracking data into a tidy format with columns: `id`, `timestamp`, `x`, and `y`.
-Supports input as data frames, `sf`, `Spatial*` objects, or file paths to CSV, Excel, Shapefiles, and GeoPackages.
+Supports input as data frames, `sf`, `sp` objects, or file paths to csv, xlsx, shp, and gpkg.
 Optionally returns a spatial object projected to WGS84 (EPSG:4326), and supports subsampling (e.g., "1 per hour").
 }

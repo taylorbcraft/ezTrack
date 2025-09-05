@@ -1,4 +1,4 @@
-#' Estimate Home Ranges for Tracked Individuals or Population
+#' Estimate home ranges for tracked individuals or population
 #'
 #' Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE).
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_home_range.R
 \name{ez_home_range}
 \alias{ez_home_range}
-\title{Estimate Home Ranges for Tracked Individuals or Population}
+\title{Estimate home ranges for tracked individuals or population}
 \usage{
 ez_home_range(
   data,
@@ -41,7 +41,7 @@ and reproject data accordingly (units in meters).}
 \item{hlim}{Optional vector of length 2 passed to `adehabitatHR::kernelUD()` when method = "kde" to constrain the bandwidth search (used with h = "LSCV").}
 }
 \value{
-An `sf` object of home range polygon(s).
+An `sf` object of utilization distribution polygon(s).
 }
 \description{
 Computes home range polygons using either Minimum Convex Polygon (MCP) or Kernel Density Estimation (KDE).

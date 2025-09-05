@@ -1,4 +1,4 @@
-#' Plot Fix Rate Timelines for Each Individual
+#' Plot fix rate timelines
 #'
 #' Creates a timeline plot showing fix events as horizontal tick marks for each individual.
 #' This allows a quick visual assessment of tracking effort, fix density, and coverage gaps.

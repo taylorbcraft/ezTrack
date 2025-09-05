@@ -1,11 +1,11 @@
-#' Plot Tracking Data and Home Ranges Together
+#' Plot tracking data and home ranges
 #'
 #' A unified function for visualizing tracking data and home range polygons on an interactive map.
 #' Accepts tracking points (from `ez_track`) and home ranges (from `ez_home_range`), and
 #' allows layer-specific customization of appearance and filtering by time.
 #'
 #' @param tracks Output from `ez_track()` — a data frame or `sf` with `id`, `timestamp`, `x`, `y`.
-#' @param home_ranges Output from `ez_home_range()` — an `sf` polygon object.
+#' @param home_ranges Output from `ez_home_range()` or any `sf` polygon object.
 #' @param individual Optional. Character or character vector of individual ID(s) to display.
 #' @param show_points Logical, whether to draw individual locations. Default TRUE.
 #' @param show_paths Logical, whether to draw movement paths. Default TRUE.
