@@ -29,6 +29,7 @@ ez_latitude_plot <- function(data,
   }
 
   data$timestamp <- as.POSIXct(data$timestamp)
+  data$id <- as.character(data$id)
 
   # Filter by start_date
   if (!is.null(start_date)) {

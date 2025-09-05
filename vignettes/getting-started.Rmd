@@ -41,10 +41,10 @@ If automatic column guessing fails or guesses incorrectly, you can manually spec
 ```{r}
 tracks_manual <- ez_track(
   data = godwit_tracks,
-  id_col = 'individual.local.identifier',
-  time_col = 'timestamp',
-  x_col = 'location.long',
-  y_col = 'location.lat',
+  id = 'individual.local.identifier',
+  timestamp = 'timestamp',
+  x = 'location.long',
+  y = 'location.lat',
 )
 ```
 

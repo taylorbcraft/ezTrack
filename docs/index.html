@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>ezTrack: an R Package with tools to enable exploration of animal movement data • ezTrack</title>
+<title>Tools for Exploring Animal Movement Data • ezTrack</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="ezTrack: an R Package with tools to enable exploration of animal movement data">
-<meta name="description" content="A lightweight and user-friendly toolkit for importing, cleaning, summarizing, analyzing, and mapping animal tracking data. Supports raw CSV or Excel input, calculates movement summaries and home ranges (MCP or KDE), and renders interactive Leaflet maps.">
-<meta property="og:description" content="A lightweight and user-friendly toolkit for importing, cleaning, summarizing, analyzing, and mapping animal tracking data. Supports raw CSV or Excel input, calculates movement summaries and home ranges (MCP or KDE), and renders interactive Leaflet maps.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Tools for Exploring Animal Movement Data">
+<meta name="description" content="Provides tools for exploring animal tracking data, from raw telemetry points to summaries, interactive maps, and home range estimates. It is designed to be beginner-friendly and requires minimal data wrangling.">
+<meta property="og:description" content="Provides tools for exploring animal tracking data, from raw telemetry points to summaries, interactive maps, and home range estimates. It is designed to be beginner-friendly and requires minimal data wrangling.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -46,6 +46,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="eztrack">ezTrack<a class="anchor" aria-label="anchor" href="#eztrack"></a>
 </h1></div>
+<p><a href="https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></p>
 <p><strong>ezTrack</strong> is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling.</p>
 <p><a href="https://taylorbcraft.github.io/ezTrack/articles/getting-started.html" class="external-link">View the vignette</a></p>
 <hr>
@@ -87,7 +88,7 @@
 <ul>
 <li>Per-ID stats: duration, fixes/day, distance, speed</li>
 <li>Filters by date range</li>
-<li>Optional HTML report: <code>ez_summary(data, report = TRUE)</code>
+<li>Optional HTML report: <code>ez_summary(tracking_data, report = TRUE)</code>
 </li>
 </ul>
 <hr>
@@ -164,10 +165,10 @@
 <span><span class="co"># Step 5: Compute home ranges</span></span>
 <span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ez_home_range.html">ez_home_range</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 5: Map tracks and home ranges</span></span>
+<span><span class="co"># Step 6: Map tracks and home ranges</span></span>
 <span><span class="fu"><a href="reference/ez_map.html">ez_map</a></span><span class="op">(</span><span class="va">trk</span>, home_ranges <span class="op">=</span> <span class="va">hr</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 6: Latitude plot</span></span>
+<span><span class="co"># Step 7: Latitude plot</span></span>
 <span><span class="fu"><a href="reference/ez_latitude_plot.html">ez_latitude_plot</a></span><span class="op">(</span><span class="va">trk</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>

@@ -14,7 +14,7 @@
 ```r
 # Install development version from GitHub
 # install.packages("devtools")
-devtools::install_github("taylorbcraft/ezTrack")
+devtools::install_github("taylorbcraft/ezTrack",force = TRUE)
 ```
 
 ---

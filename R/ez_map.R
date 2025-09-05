@@ -25,18 +25,6 @@
 #' @param end_date Optional filter (Date or string) to remove data after this date.
 #'
 #' @return A `leaflet` map object.
-#'
-#' @examples
-#' # Simulate tracks
-#' tracks <- data.frame(
-#'   id = rep(c("A", "B"), each = 10),
-#'   timestamp = rep(seq.POSIXt(as.POSIXct("2023-01-01"), by = "1 day", length.out = 10), 2),
-#'   x = c(runif(10, -1, 1), runif(10, 0, 2)),
-#'   y = c(runif(10, 51, 52), runif(10, 51.5, 52.5))
-#' )
-#'
-#' # Plot map
-#' ez_map(tracks, point_color = "timestamp")
 #' @export
 ez_map <- function(tracks = NULL,
                    home_ranges = NULL,
@@ -70,6 +58,9 @@ ez_map <- function(tracks = NULL,
     }
   }
 
+  pal_point <- NULL
+  pal_path  <- NULL
+
   if (!is.null(tracks)) {
     if (!inherits(tracks, "sf") && !all(c("id", "x", "y", "timestamp") %in% names(tracks))) {
       stop("`tracks` must be a data frame or sf with columns: id, x, y, timestamp")
@@ -86,11 +77,11 @@ ez_map <- function(tracks = NULL,
     # Precompute point color
     if (point_color %in% names(tracks)) {
       if (point_color == "timestamp") {
-        pal <- leaflet::colorNumeric("Reds", domain = as.numeric(range(tracks$timestamp, na.rm = TRUE)))
-        tracks$point_col <- pal(as.numeric(tracks$timestamp))
+        pal_point <- leaflet::colorNumeric("Reds", domain = as.numeric(range(tracks$timestamp, na.rm = TRUE)))
+        tracks$point_col <- pal_point(as.numeric(tracks$timestamp))
       } else {
-        pal <- leaflet::colorFactor(color_palette, domain = unique(tracks[[point_color]]))
-        tracks$point_col <- pal(tracks[[point_color]])
+        pal_point <- leaflet::colorFactor(color_palette, domain = unique(tracks[[point_color]]))
+        tracks$point_col <- pal_point(tracks[[point_color]])
       }
     } else {
       tracks$point_col <- point_color
@@ -99,11 +90,11 @@ ez_map <- function(tracks = NULL,
     # Precompute path color
     if (path_color %in% names(tracks)) {
       if (path_color == "timestamp") {
-        pal <- leaflet::colorNumeric("Reds", domain = as.numeric(range(tracks$timestamp, na.rm = TRUE)))
-        tracks$path_col <- pal(as.numeric(tracks$timestamp))
+        pal_path <- leaflet::colorNumeric("Reds", domain = as.numeric(range(tracks$timestamp, na.rm = TRUE)))
+        tracks$path_col <- pal_path(as.numeric(tracks$timestamp))
       } else {
-        pal <- leaflet::colorFactor(color_palette, domain = unique(tracks[[path_color]]))
-        tracks$path_col <- pal(tracks[[path_color]])
+        pal_path <- leaflet::colorFactor(color_palette, domain = unique(tracks[[path_color]]))
+        tracks$path_col <- pal_path(tracks[[path_color]])
       }
     } else {
       tracks$path_col <- path_color
@@ -112,12 +103,7 @@ ez_map <- function(tracks = NULL,
 
   map <- leaflet::leaflet() %>%
     leaflet::addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
-    leaflet::addProviderTiles("CartoDB.Positron", group = "Light") %>%
-    leaflet::addLayersControl(
-      baseGroups = c("Satellite", "Light"),
-      overlayGroups = c("Tracks", "Polygons"),
-      options = leaflet::layersControlOptions(collapsed = FALSE)
-    )
+    leaflet::addProviderTiles("CartoDB.Positron", group = "Light")
 
   if (!is.null(tracks)) {
     ids <- unique(tracks$id)
@@ -168,8 +154,8 @@ ez_map <- function(tracks = NULL,
       warning("`home_ranges` is not a polygon layer.")
     } else {
       poly_col <- if (is.character(polygon_color) && polygon_color %in% names(home_ranges)) {
-        pal <- leaflet::colorFactor(color_palette, domain = home_ranges[[polygon_color]])
-        pal(home_ranges[[polygon_color]])
+        pal_poly <- leaflet::colorFactor(color_palette, domain = home_ranges[[polygon_color]])
+        pal_poly(home_ranges[[polygon_color]])
       } else polygon_color
 
       map <- map %>%

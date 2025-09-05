@@ -73,15 +73,3 @@ A unified function for visualizing tracking data and home range polygons on an i
 Accepts tracking points (from `ez_track`) and home ranges (from `ez_home_range`), and
 allows layer-specific customization of appearance and filtering by time.
 }
-\examples{
-# Simulate tracks
-tracks <- data.frame(
-  id = rep(c("A", "B"), each = 10),
-  timestamp = rep(seq.POSIXt(as.POSIXct("2023-01-01"), by = "1 day", length.out = 10), 2),
-  x = c(runif(10, -1, 1), runif(10, 0, 2)),
-  y = c(runif(10, 51, 52), runif(10, 51.5, 52.5))
-)
-
-# Plot map
-ez_map(tracks, point_color = "timestamp")
-}
