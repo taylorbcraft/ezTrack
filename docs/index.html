@@ -47,7 +47,7 @@
 <div class="page-header"><h1 id="eztrack">ezTrack<a class="anchor" aria-label="anchor" href="#eztrack"></a>
 </h1></div>
 <p><a href="https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></p>
-<p><strong>ezTrack</strong> is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling.</p>
+<p><strong>ezTrack</strong> is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling. By combining data cleaning, visualization, and basic analysis in a single workflow, ezTrack lowers the barrier for students, researchers, and conservation practitioners to quickly extract ecological insight without extensive programming expertise.</p>
 <p><a href="https://taylorbcraft.github.io/ezTrack/articles/getting-started.html" class="external-link">View the vignette</a></p>
 <hr>
 <div class="section level2">
@@ -56,7 +56,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install development version from GitHub</span></span>
 <span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"taylorbcraft/ezTrack"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"taylorbcraft/ezTrack"</span>,force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -72,9 +72,9 @@
 <li>Auto-detects columns for <code>id</code>, <code>timestamp</code>, <code>x</code>, and <code>y</code>
 </li>
 <li>Supports CSV, Excel, shapefiles (.shp), and GeoPackages (.gpkg) files</li>
-<li>Also accepts data.frame, sf, Spatial*, and move objects</li>
+<li>Also accepts data.frame, sf, and sp objects</li>
 <li>Removes rows with missing or duplicate (id, timestamp) combinations</li>
-<li>Returns a clean data frame or (optionally) a <code>sf</code> object projected to WGS84</li>
+<li>Returns a clean data frame or (optionally) an <code>sf</code> object projected to WGS84</li>
 <li>Supports time-based subsampling (e.g., “1 per hour”, “2 per day”)</li>
 </ul>
 <hr>
@@ -190,12 +190,15 @@
 </li>
 <li>
 <code>magrittr</code>: for <code>%&gt;%</code> pipe in mapping function</li>
+<li>
+<code>dplyr</code>: subsampling and data manipulation</li>
 </ul>
 <p>Install missing packages using:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"sf"</span>, <span class="st">"leaflet"</span>, <span class="st">"geosphere"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"readxl"</span>,</span>
-<span>  <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>, <span class="st">"ggplot2"</span>, <span class="st">"viridisLite"</span>, <span class="st">"magrittr"</span>, <span class="st">"dplyr"</span></span>
+<span>  <span class="st">"knitr"</span>, <span class="st">"kableExtra"</span>, <span class="st">"htmltools"</span>, <span class="st">"ggplot2"</span>, <span class="st">"viridisLite"</span>, </span>
+<span>  <span class="st">"magrittr"</span>, <span class="st">"dplyr"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
