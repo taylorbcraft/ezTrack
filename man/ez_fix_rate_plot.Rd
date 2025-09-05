@@ -15,13 +15,13 @@ ez_fix_rate_plot(
 \arguments{
 \item{data}{A data frame or `sf` object with columns `id` and `timestamp`.}
 
-\item{date_breaks}{Optional. Spacing of x-axis breaks (e.g., `"1 month"`, `"2 weeks"`). If `NULL`, ggplot2 chooses automatically.}
+\item{date_breaks}{Optional. Spacing of x-axis breaks (e.g., "1 month", "2 weeks"). If `NULL`, ggplot2 chooses automatically.}
 
 \item{date_format}{Optional. Format string for x-axis date labels (e.g., "\%b \%Y", "\%d-\%m"). If `NULL`, ggplot2 chooses automatically.}
 
-\item{start_date}{Optional. A `Date` or string (e.g., `"2024-01-01"`). Filters out fixes before this date.}
+\item{start_date}{Optional. A `Date` or string (e.g., "2024-01-01"). Filters out fixes before this date.}
 
-\item{end_date}{Optional. A `Date` or string (e.g., `"2024-12-31"`). Filters out fixes after this date.}
+\item{end_date}{Optional. A `Date` or string (e.g., "2024-12-31"). Filters out fixes after this date.}
 }
 \value{
 A `ggplot` object showing fix timelines per individual.

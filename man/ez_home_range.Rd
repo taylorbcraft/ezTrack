@@ -20,11 +20,13 @@ ez_home_range(
 \arguments{
 \item{data}{A data frame or `sf` object with columns `id`, `timestamp`, `x`, and `y`.}
 
-\item{method}{Method for home range estimation. One of `"mcp"` (default) or `"kde"`.}
+\item{method}{Method for home range estimation. One of "mcp" (default) or "kde".}
 
 \item{level}{Percentage of points to include in the home range (e.g., 95 for 95\%). Default is 95.}
 
-\item{crs}{Optional CRS to project the data before calculation. If NULL, uses EPSG:3857 (Web Mercator).}
+\item{crs}{Optional CRS to project the data before calculation.
+If `NULL`, the function will automatically detect the UTM zone of the dataset centroid
+and reproject data accordingly (units in meters).}
 
 \item{population}{Logical. If TRUE, returns a single home range polygon for all data combined.}
 
@@ -34,7 +36,7 @@ ez_home_range(
 
 \item{kde_extent}{Numeric. When method = "kde", passed to `adehabitatHR::kernelUD()` to control the extent of the grid for KDE. Default is 1.}
 
-\item{h}{Bandwidth method when method = "kde". One of `"href"` (default), "LSCV", or a numeric value.}
+\item{h}{Bandwidth method when method = "kde". One of "href" (default), "LSCV", or a numeric value.}
 
 \item{hlim}{Optional vector of length 2 passed to `adehabitatHR::kernelUD()` when method = "kde" to constrain the bandwidth search (used with h = "LSCV").}
 }
