@@ -115,7 +115,8 @@ ez_latitude_plot(trk)
 - `readxl`: Excel import support  
 - `knitr`, `kableExtra`, `htmltools`: HTML reporting  
 - `ggplot2`, `viridisLite`: plotting with color palettes  
-- `magrittr`: for `%>%` pipe in mapping function  
+- `magrittr`: for `%>%` pipe in mapping function
+- `dplyr`: subsampling and data manipulation
 
 
 Install missing packages using:
