@@ -3,7 +3,16 @@
 \name{\%>\%}
 \alias{\%>\%}
 \title{Pipe operator}
-\description{
-Re-export of the magrittr pipe for use in user scripts.
+\arguments{
+\item{lhs}{A value or the result of a function call.}
+
+\item{rhs}{A function call using the value from `lhs` as the first argument.}
 }
-\keyword{internal}
+\value{
+The result of evaluating the right-hand side (`rhs`) expression,
+  where the left-hand side (`lhs`) value is passed as the first argument.
+}
+\description{
+Re-exports the pipe operator \code{\%>\%} from 'magrittr', allowing you to
+chain commands together in a readable left-to-right style.
+}

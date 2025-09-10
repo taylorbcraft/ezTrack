@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_map.R
 \name{ez_map}
 \alias{ez_map}
-\title{Plot tracking data and home ranges}
+\title{Plot Tracking Data and Home Ranges Together}
 \usage{
 ez_map(
   tracks = NULL,
@@ -29,7 +29,7 @@ ez_map(
 \arguments{
 \item{tracks}{Output from `ez_track()` — a data frame or `sf` with `id`, `timestamp`, `x`, `y`.}
 
-\item{home_ranges}{Output from `ez_home_range()` or any `sf` polygon object.}
+\item{home_ranges}{Output from `ez_home_range()` — an `sf` polygon object.}
 
 \item{individual}{Optional. Character or character vector of individual ID(s) to display.}
 
@@ -72,4 +72,16 @@ A `leaflet` map object.
 A unified function for visualizing tracking data and home range polygons on an interactive map.
 Accepts tracking points (from `ez_track`) and home ranges (from `ez_home_range`), and
 allows layer-specific customization of appearance and filtering by time.
+}
+\examples{
+# Simulate tracks
+tracks <- data.frame(
+  id = rep(c("A", "B"), each = 10),
+  timestamp = rep(seq.POSIXt(as.POSIXct("2023-01-01"), by = "1 day", length.out = 10), 2),
+  x = c(runif(10, -1, 1), runif(10, 0, 2)),
+  y = c(runif(10, 51, 52), runif(10, 51.5, 52.5))
+)
+
+# Plot map
+ez_map(tracks, point_color = "timestamp")
 }

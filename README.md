@@ -2,7 +2,7 @@
 
 [![R-CMD-check](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml)
 
-**ezTrack** is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling. By combining data cleaning, visualization, and basic analysis in a single workflow, ezTrack lowers the barrier for students, researchers, and conservation practitioners to quickly extract ecological insight without extensive programming expertise.
+**ezTrack** is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling.
 
 [View the vignette](https://taylorbcraft.github.io/ezTrack/articles/getting-started.html)
 
@@ -14,7 +14,7 @@
 ```r
 # Install development version from GitHub
 # install.packages("devtools")
-devtools::install_github("taylorbcraft/ezTrack",force = TRUE)
+devtools::install_github("taylorbcraft/ezTrack")
 ```
 
 ---
@@ -27,9 +27,9 @@ tracking_data <- ez_track("my_tracking_file.csv")
 ```
 - Auto-detects columns for `id`, `timestamp`, `x`, and `y`
 - Supports CSV, Excel, shapefiles (.shp), and GeoPackages (.gpkg) files
-- Also accepts data.frame, sf, and sp objects
+- Also accepts data.frame, sf, Spatial*, and move objects
 - Removes rows with missing or duplicate (id, timestamp) combinations
-- Returns a clean data frame or (optionally) an `sf` object projected to WGS84
+- Returns a clean data frame or (optionally) a `sf` object projected to WGS84
 - Supports time-based subsampling (e.g., "1 per hour", "2 per day") 
 
 ---
@@ -115,16 +115,14 @@ ez_latitude_plot(trk)
 - `readxl`: Excel import support  
 - `knitr`, `kableExtra`, `htmltools`: HTML reporting  
 - `ggplot2`, `viridisLite`: plotting with color palettes  
-- `magrittr`: for `%>%` pipe in mapping function
-- `dplyr`: subsampling and data manipulation
+- `magrittr`: for `%>%` pipe in mapping function  
 
 
 Install missing packages using:
 ```r
 install.packages(c(
   "sf", "leaflet", "geosphere", "adehabitatHR", "readxl",
-  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", 
-  "magrittr", "dplyr"
+  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", "magrittr", "dplyr"
 ))
 ```
 

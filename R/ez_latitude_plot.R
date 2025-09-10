@@ -1,6 +1,6 @@
-#' Plot latitude over time
+#' Plot Latitude Over Time
 #'
-#' Creates a time series plot of latitude (y-axis) over time (x-axis), with separate lines for each individual animal. Optionally facets the plot by animal and allows customization of x-axis date format and break spacing.
+#' Creates a time series plot of latitude (y-axis) over timestamp (x-axis), with separate lines for each individual animal. Optionally facets the plot by animal and allows customization of x-axis date format and break spacing.
 #'
 #' @param data A data frame or `sf` object with columns `id`, `timestamp`, and `y` (latitude).
 #' @param color_palette Character. Viridis palette option: "viridis", "magma", "plasma", "inferno", "cividis", or "turbo". Default is "turbo".
@@ -29,7 +29,6 @@ ez_latitude_plot <- function(data,
   }
 
   data$timestamp <- as.POSIXct(data$timestamp)
-  data$id <- as.character(data$id)
 
   # Filter by start_date
   if (!is.null(start_date)) {

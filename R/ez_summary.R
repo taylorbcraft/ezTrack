@@ -1,27 +1,18 @@
-#' Summarize animal tracking data
+#' Summarize Animal Tracking Data
 #'
 #' Calculate basic summary statistics per tracked individual. This function is useful
 #' for quickly understanding data coverage, gaps, and movement distance for each animal.
-#'
+
 #' The following summary statistics are returned for each unique `id`:
-#'
-#' `n_fixes`: Number of location records
-#'
-#' `first_location`: Timestamp of the first recorded location
-#'
-#' `last_location`: Timestamp of the last recorded location
-#'
-#' `tracking_duration_days`: Duration between first and last fix (in days)
-#'
-#' `fixes_per_day`: Average number of fixes per day
-#'
-#' `median_interval_hours`: Median interval between fixes (in hours)
-#'
-#' `max_time_gap_days`: Longest time gap between consecutive fixes (in days)
-#'
-#' `distance_km`: Total distance traveled (in kilometers), calculated using the Haversine formula
-#'
-#' `avg_speed_kmh`: Average speed (km/h), computed as distance divided by tracking duration in hours
+#' - `n_fixes`: Number of location records
+#' - `first_location`: Timestamp of the first recorded location
+#' - `last_location`: Timestamp of the last recorded location
+#' - `tracking_duration_days`: Duration between first and last fix (in days)
+#' - `fixes_per_day`: Average number of fixes per day
+#' - `median_interval_hours`: Median interval between fixes (in hours)
+#' - `max_time_gap_days`: Longest time gap between consecutive fixes (in days)
+#' - `distance_km`: Total distance traveled (in kilometers), calculated using the Haversine formula
+#' - `avg_speed_kmh`: Average speed (km/h), computed as distance divided by tracking duration in hours
 #'
 #' @param data A data frame or sf object with columns `id`, `timestamp`, `x`, and `y`.
 #' @param report Logical. If TRUE, opens an HTML summary table in your browser for easy copying into slides or documents.

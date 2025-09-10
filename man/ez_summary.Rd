@@ -2,7 +2,7 @@
 % Please edit documentation in R/ez_summary.R
 \name{ez_summary}
 \alias{ez_summary}
-\title{Summarize animal tracking data}
+\title{Summarize Animal Tracking Data}
 \usage{
 ez_summary(data, start_date = NULL, end_date = NULL, report = FALSE)
 }
@@ -21,27 +21,16 @@ A data frame with summary statistics per `id`, or an HTML table if `report = TRU
 \description{
 Calculate basic summary statistics per tracked individual. This function is useful
 for quickly understanding data coverage, gaps, and movement distance for each animal.
-}
-\details{
 The following summary statistics are returned for each unique `id`:
-
-`n_fixes`: Number of location records
-
-`first_location`: Timestamp of the first recorded location
-
-`last_location`: Timestamp of the last recorded location
-
-`tracking_duration_days`: Duration between first and last fix (in days)
-
-`fixes_per_day`: Average number of fixes per day
-
-`median_interval_hours`: Median interval between fixes (in hours)
-
-`max_time_gap_days`: Longest time gap between consecutive fixes (in days)
-
-`distance_km`: Total distance traveled (in kilometers), calculated using the Haversine formula
-
-`avg_speed_kmh`: Average speed (km/h), computed as distance divided by tracking duration in hours
+- `n_fixes`: Number of location records
+- `first_location`: Timestamp of the first recorded location
+- `last_location`: Timestamp of the last recorded location
+- `tracking_duration_days`: Duration between first and last fix (in days)
+- `fixes_per_day`: Average number of fixes per day
+- `median_interval_hours`: Median interval between fixes (in hours)
+- `max_time_gap_days`: Longest time gap between consecutive fixes (in days)
+- `distance_km`: Total distance traveled (in kilometers), calculated using the Haversine formula
+- `avg_speed_kmh`: Average speed (km/h), computed as distance divided by tracking duration in hours
 }
 \examples{
 data(godwit_tracks)

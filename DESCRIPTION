@@ -1,18 +1,23 @@
 Package: ezTrack
 Type: Package
-Title: Tools for Exploring Animal Movement Data
+Title: Exploring Animal Movement Data
 Version: 0.1.0
 Authors@R: 
     person(given = "Taylor", 
            family = "Craft", 
            email = "taylor.craft.mail@gmail.com", 
            role = c("aut", "cre"))
-Description: Provides tools for exploring animal tracking data, from raw telemetry points to summaries, interactive maps, and home range estimates. It is designed to be beginner-friendly and requires minimal data wrangling.
+Description: Streamlines common steps for working with animal tracking data, 
+    from raw telemetry points to summaries, interactive maps, and home range 
+    estimates. Designed to be beginner-friendly, it enables rapid exploration 
+    of spatial and movement data with minimal wrangling, providing a unified 
+    workflow for importing, summarizing, and visualizing, and analyzing animal 
+    movement datasets.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
-Depends: R (>= 4.1.0)
+Depends: R (>= 3.6.0)
 Imports:
     methods,
     sf,

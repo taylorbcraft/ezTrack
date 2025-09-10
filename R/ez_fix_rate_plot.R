@@ -1,13 +1,13 @@
-#' Plot fix rate timelines
+#' Plot Fix Rate Timelines for Each Individual
 #'
 #' Creates a timeline plot showing fix events as horizontal tick marks for each individual.
 #' This allows a quick visual assessment of tracking effort, fix density, and coverage gaps.
 #'
 #' @param data A data frame or `sf` object with columns `id` and `timestamp`.
-#' @param date_breaks Optional. Spacing of x-axis breaks (e.g., "1 month", "2 weeks"). If `NULL`, ggplot2 chooses automatically.
+#' @param date_breaks Optional. Spacing of x-axis breaks (e.g., `"1 month"`, `"2 weeks"`). If `NULL`, ggplot2 chooses automatically.
 #' @param date_format Optional. Format string for x-axis date labels (e.g., "\%b \%Y", "\%d-\%m"). If `NULL`, ggplot2 chooses automatically.
-#' @param start_date Optional. A `Date` or string (e.g., "2024-01-01"). Filters out fixes before this date.
-#' @param end_date Optional. A `Date` or string (e.g., "2024-12-31"). Filters out fixes after this date.
+#' @param start_date Optional. A `Date` or string (e.g., `"2024-01-01"`). Filters out fixes before this date.
+#' @param end_date Optional. A `Date` or string (e.g., `"2024-12-31"`). Filters out fixes after this date.
 #'
 #' @return A `ggplot` object showing fix timelines per individual.
 #'
