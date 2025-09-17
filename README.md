@@ -4,9 +4,6 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/ezTrack)](https://CRAN.R-project.org/package=ezTrack)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/ezTrack)](https://CRAN.R-project.org/package=ezTrack)
 [![R-CMD-check](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-[![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://taylorbcraft.github.io/ezTrack/)
 <!-- badges: end -->
 
 
