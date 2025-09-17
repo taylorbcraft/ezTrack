@@ -1,6 +1,14 @@
 # ezTrack
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/ezTrack)](https://CRAN.R-project.org/package=ezTrack)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/ezTrack)](https://CRAN.R-project.org/package=ezTrack)
 [![R-CMD-check](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taylorbcraft/ezTrack/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+[![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://taylorbcraft.github.io/ezTrack/)
+<!-- badges: end -->
+
 
 **ezTrack** is a lightweight R package for exploring animal tracking data. It offers a gentle, beginner-friendly workflow to go from raw telemetry data to clean summaries, interactive maps, and home range estimates with minimal data wrangling.
 
