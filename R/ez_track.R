@@ -194,26 +194,178 @@ ez_track <- function(data,
 
   # Normalize column names
   names(df) <- tolower(gsub("\\s+", "_", names(df)))
+  if (anyDuplicated(names(df))) {
+    stop("Column names are not unique after normalization. Please rename duplicate columns before calling `ez_track()`.")
+  }
 
-  # Define likely column name patterns for automated detection
-  id_patterns        <- c("^id$", "individual", "individual_id", "track", "tag_id", "device", "name")
-  timestamp_patterns <- c("timestamp", "datetime", "time", "date", "dt")
-  x_patterns         <- c("^x$", "longitude", "lon", "location_long", "utm_e", "easting")
-  y_patterns         <- c("^y$", "latitude", "lat", "location_lat", "utm_n", "northing")
+  score_name_match <- function(name, exact = character(), regex = character(), broad = character()) {
+    score <- 0
 
-  # Try to match most complete (least NA) column per pattern group
-  match_column <- function(df, patterns) {
-    matches <- unlist(lapply(patterns, function(p) grep(p, names(df), value = TRUE)))
-    if (length(matches) == 0) return(NULL)
-    scores <- sapply(matches, function(col) sum(!is.na(df[[col]])) / length(df[[col]]))
-    matches[which.max(scores)]
+    if (name %in% exact) {
+      score <- score + 100
+    }
+
+    for (pattern in regex) {
+      if (grepl(pattern, name, perl = TRUE)) {
+        score <- score + 30
+      }
+    }
+
+    for (pattern in broad) {
+      if (grepl(pattern, name, perl = TRUE)) {
+        score <- score + 10
+      }
+    }
+
+    score
+  }
+
+  maybe_warn_ambiguous <- function(scores, field) {
+    if (nrow(scores) < 2) return(invisible(NULL))
+
+    scores <- scores[order(-scores$score, scores$name), ]
+    top <- scores[1, ]
+    runner_up <- scores[2, ]
+
+    if (is.finite(top$score) &&
+        is.finite(runner_up$score) &&
+        top$score > 0 &&
+        (top$score - runner_up$score) <= 8) {
+      warning(
+        "Auto-detection for `", field, "` is ambiguous between columns `",
+        top$name, "` and `", runner_up$name, "`. Using `", top$name,
+        "`. Set `", field, " = ` explicitly to override."
+      )
+    }
+  }
+
+  detect_id_column <- function(df) {
+    exact <- c(
+      "id", "animal_id", "individual_id", "tag_id", "device_id", "subject_id",
+      "bird_id", "deployid", "deploy_id", "track_id", "individual.local.identifier"
+    )
+    regex <- c(
+      "(^|_)(animal|individual|subject|bird|tag|device|deploy)(_?id)?$",
+      "(^|_)track_id$",
+      "(^|_)id$"
+    )
+    broad <- c("identifier", "individual", "animal", "subject", "bird", "tag", "device", "deploy")
+
+    scores <- lapply(names(df), function(col) {
+      values <- df[[col]]
+      non_missing <- values[!is.na(values)]
+      unique_ratio <- if (length(non_missing) == 0) 0 else length(unique(non_missing)) / length(non_missing)
+      type_score <- if (is.character(values) || is.factor(values) || is.integer(values)) 15 else 0
+      repeated_score <- if (length(non_missing) > 0 && unique_ratio > 0.01 && unique_ratio < 0.95) 15 else 0
+      completeness_score <- if (length(values) == 0) 0 else 10 * (sum(!is.na(values)) / length(values))
+
+      data.frame(
+        name = col,
+        score = score_name_match(col, exact, regex, broad) + type_score + repeated_score + completeness_score,
+        stringsAsFactors = FALSE
+      )
+    })
+
+    scores <- do.call(rbind, scores)
+    scores <- scores[scores$score > 0, , drop = FALSE]
+    if (nrow(scores) == 0) return(NULL)
+    maybe_warn_ambiguous(scores, "id")
+    scores$name[which.max(scores$score)]
+  }
+
+  detect_timestamp_column <- function(df, tz, timestamp_format) {
+    exact <- c("timestamp", "datetime", "fix_time", "event_time", "time_utc", "timestamp_utc")
+    regex <- c(
+      "(^|_)(fix|event|obs|observation|gps|location)_(time|datetime|timestamp|date)$",
+      "(^|_)(time|datetime|timestamp)$"
+    )
+    broad <- c("timestamp", "datetime", "time", "date")
+
+    scores <- lapply(names(df), function(col) {
+      values <- df[[col]]
+      parsed_fraction <- 0
+
+      if (inherits(values, c("POSIXct", "POSIXlt", "Date"))) {
+        parsed_fraction <- 1
+      } else if (is.character(values) || is.factor(values) || is.numeric(values)) {
+        parsed_fraction <- tryCatch({
+          parsed <- parse_timestamp_column(values, tz = tz, timestamp_format = timestamp_format)
+          valid_input <- sum(!is.na(values))
+          if (valid_input == 0) 0 else sum(!is.na(parsed)) / valid_input
+        }, error = function(e) 0)
+      }
+
+      completeness_score <- if (length(values) == 0) 0 else 10 * (sum(!is.na(values)) / length(values))
+
+      data.frame(
+        name = col,
+        score = score_name_match(col, exact, regex, broad) + 60 * parsed_fraction + completeness_score,
+        parsed_fraction = parsed_fraction,
+        stringsAsFactors = FALSE
+      )
+    })
+
+    scores <- do.call(rbind, scores)
+    scores <- scores[scores$parsed_fraction > 0 | scores$score >= 100, , drop = FALSE]
+    if (nrow(scores) == 0) return(NULL)
+    maybe_warn_ambiguous(scores[, c("name", "score")], "timestamp")
+    scores$name[which.max(scores$score)]
+  }
+
+  detect_coord_column <- function(df, axis = c("x", "y")) {
+    axis <- match.arg(axis)
+
+    exact <- if (axis == "x") {
+      c("x", "lon", "long", "longitude", "location_long", "utm_e", "easting")
+    } else {
+      c("y", "lat", "latitude", "location_lat", "utm_n", "northing")
+    }
+
+    regex <- if (axis == "x") {
+      c("(^|_)(lon|long|longitude)$", "(^|_)(utm_?e|easting)$")
+    } else {
+      c("(^|_)(lat|latitude)$", "(^|_)(utm_?n|northing)$")
+    }
+
+    broad <- if (axis == "x") c("lon", "long", "easting") else c("lat", "northing")
+
+    scores <- lapply(names(df), function(col) {
+      values <- suppressWarnings(as.numeric(df[[col]]))
+      numeric_fraction <- if (length(values) == 0) 0 else sum(!is.na(values)) / length(values)
+      finite_values <- values[is.finite(values)]
+
+      lon_fraction <- if (length(finite_values) == 0) 0 else mean(finite_values >= -180 & finite_values <= 180)
+      lat_fraction <- if (length(finite_values) == 0) 0 else mean(finite_values >= -90 & finite_values <= 90)
+      projected_fraction <- if (length(finite_values) == 0) 0 else mean(abs(finite_values) > 180)
+
+      plausibility_score <- if (axis == "x") {
+        max(20 * lon_fraction, 12 * projected_fraction)
+      } else {
+        max(20 * lat_fraction, 12 * projected_fraction)
+      }
+
+      variation_score <- if (length(unique(finite_values)) > 1) 10 else 0
+
+      data.frame(
+        name = col,
+        score = score_name_match(col, exact, regex, broad) + 40 * numeric_fraction + plausibility_score + variation_score,
+        numeric_fraction = numeric_fraction,
+        stringsAsFactors = FALSE
+      )
+    })
+
+    scores <- do.call(rbind, scores)
+    scores <- scores[scores$numeric_fraction > 0, , drop = FALSE]
+    if (nrow(scores) == 0) return(NULL)
+    maybe_warn_ambiguous(scores[, c("name", "score")], axis)
+    scores$name[which.max(scores$score)]
   }
 
   # Guess missing columns if not explicitly provided
-  id        <- id        %||% match_column(df, id_patterns)
-  timestamp <- timestamp %||% match_column(df, timestamp_patterns)
-  x         <- x         %||% match_column(df, x_patterns)
-  y         <- y         %||% match_column(df, y_patterns)
+  id        <- id        %||% detect_id_column(df)
+  timestamp <- timestamp %||% detect_timestamp_column(df, tz = tz, timestamp_format = timestamp_format)
+  x         <- x         %||% detect_coord_column(df, axis = "x")
+  y         <- y         %||% detect_coord_column(df, axis = "y")
 
   # Check for required columns
   missing <- c()
@@ -223,6 +375,14 @@ ez_track <- function(data,
   if (is.null(y))         missing <- c(missing, "y")
   if (length(missing) > 0)
     stop("Missing required column(s): ", paste(missing, collapse = ", "))
+
+  selected_cols <- c(id = id, timestamp = timestamp, x = x, y = y)
+  if (length(unique(unname(selected_cols))) < length(selected_cols)) {
+    stop(
+      "Auto-detection mapped multiple required fields to the same source column. ",
+      "Please set `id`, `timestamp`, `x`, and `y` explicitly."
+    )
+  }
 
   if (verbose) {
     message("Detected columns - id: ", id, ", timestamp: ", timestamp, ", x: ", x, ", y: ", y)

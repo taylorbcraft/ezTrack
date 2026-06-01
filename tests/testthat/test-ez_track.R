@@ -56,6 +56,22 @@ test_that("ez_track parses common character timestamp formats", {
   expect_false(any(is.na(result$timestamp)))
 })
 
+test_that("ez_track auto-detects common nonstandard tracking column names", {
+  df <- data.frame(
+    animal_id = c("bird_a", "bird_a", "bird_b"),
+    fix_time = c("2020-01-01 12:34:56", "2020-01-02 08:00:00", "2020-01-03 09:10:11"),
+    longitude = c(10, 10.1, 11),
+    latitude = c(50, 50.1, 51),
+    stringsAsFactors = FALSE
+  )
+
+  result <- ez_track(df, as_sf = FALSE, verbose = FALSE)
+
+  expect_true(all(c("id", "timestamp", "x", "y") %in% names(result)))
+  expect_equal(result$id, c("bird_a", "bird_a", "bird_b"))
+  expect_false(any(is.na(result$timestamp)))
+})
+
 test_that("ez_track supports explicit timestamp_format for ambiguous dates", {
   df <- data.frame(
     id = c("a", "a"),
@@ -73,6 +89,39 @@ test_that("ez_track supports explicit timestamp_format for ambiguous dates", {
 
   expect_equal(format(result$timestamp[1], "%Y-%m-%d %H:%M:%S", tz = "UTC"), "2020-01-31 23:15:00")
   expect_equal(format(result$timestamp[2], "%Y-%m-%d %H:%M:%S", tz = "UTC"), "2020-02-01 00:15:00")
+})
+
+test_that("ez_track prefers fix timestamp over other date-like columns", {
+  df <- data.frame(
+    animal_id = c("a", "a", "b"),
+    created_at = c("2024-06-01", "2024-06-01", "2024-06-01"),
+    fix_time = c("2020-01-01 01:00:00", "2020-01-01 02:00:00", "2020-01-01 03:00:00"),
+    longitude = c(10, 10.1, 11),
+    latitude = c(50, 50.1, 51),
+    stringsAsFactors = FALSE
+  )
+
+  result <- ez_track(df, as_sf = FALSE, verbose = FALSE)
+
+  expect_equal(format(result$timestamp[1], "%Y-%m-%d %H:%M:%S", tz = "UTC"), "2020-01-01 01:00:00")
+  expect_equal(format(result$timestamp[3], "%Y-%m-%d %H:%M:%S", tz = "UTC"), "2020-01-01 03:00:00")
+})
+
+test_that("ez_track prefers coordinate columns over similarly named error columns", {
+  df <- data.frame(
+    animal_id = c("a", "a", "b"),
+    fix_time = c("2020-01-01 01:00:00", "2020-01-01 02:00:00", "2020-01-01 03:00:00"),
+    longitude = c(10, 10.1, 11),
+    longitude_error = c(1000, 1000, 1000),
+    latitude = c(50, 50.1, 51),
+    latitude_error = c(800, 800, 800),
+    stringsAsFactors = FALSE
+  )
+
+  result <- ez_track(df, as_sf = FALSE, verbose = FALSE)
+
+  expect_equal(result$x, c(10, 10.1, 11))
+  expect_equal(result$y, c(50, 50.1, 51))
 })
 
 test_that("ez_track transforms to sf when as_sf = TRUE", {
