@@ -42,6 +42,39 @@ test_that("ez_track can read CSV file", {
   unlink(tmp)
 })
 
+test_that("ez_track parses common character timestamp formats", {
+  df <- data.frame(
+    id = c("a", "a", "b"),
+    timestamp = c("2020-01-01 12:34:56", "2020/01/02 08:00", "2020-01-03T09:10:11"),
+    x = c(10, 10.1, 11),
+    y = c(50, 50.1, 51)
+  )
+
+  result <- ez_track(df, as_sf = FALSE, verbose = FALSE)
+
+  expect_s3_class(result$timestamp, "POSIXct")
+  expect_false(any(is.na(result$timestamp)))
+})
+
+test_that("ez_track supports explicit timestamp_format for ambiguous dates", {
+  df <- data.frame(
+    id = c("a", "a"),
+    timestamp = c("31/01/2020 23:15", "01/02/2020 00:15"),
+    x = c(10, 10.1),
+    y = c(50, 50.1)
+  )
+
+  result <- ez_track(
+    df,
+    as_sf = FALSE,
+    verbose = FALSE,
+    timestamp_format = "%d/%m/%Y %H:%M"
+  )
+
+  expect_equal(format(result$timestamp[1], "%Y-%m-%d %H:%M:%S", tz = "UTC"), "2020-01-31 23:15:00")
+  expect_equal(format(result$timestamp[2], "%Y-%m-%d %H:%M:%S", tz = "UTC"), "2020-02-01 00:15:00")
+})
+
 test_that("ez_track transforms to sf when as_sf = TRUE", {
   df <- data.frame(
     id = "test",

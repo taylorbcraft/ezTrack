@@ -8,6 +8,7 @@ ez_track(
   data,
   format = NULL,
   tz = "UTC",
+  timestamp_format = NULL,
   crs = 4326,
   as_sf = TRUE,
   id = NULL,
@@ -27,13 +28,17 @@ ez_track(
 
 \item{tz}{Timezone for timestamps. Default is "UTC".}
 
+\item{timestamp_format}{Optional. Explicit format string for parsing character
+timestamps, passed to `as.POSIXct(..., format = )`. If `NULL`, `ez_track()`
+tries a set of common datetime formats automatically.}
+
 \item{crs}{EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).}
 
 \item{as_sf}{Logical. Return an `sf` object? Default is TRUE.}
 
 \item{id}{Optional. Column name for id.}
 
-\item{timestamp}{Optional. Column name timestamp.}
+\item{timestamp}{Optional. Column name for timestamp.}
 
 \item{x}{Optional. Column name for longitude.}
 

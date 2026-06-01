@@ -13,10 +13,13 @@
 #' @param format Optional. File format to override detection. Choices: "csv", "xlsx", "shp", "gpkg".
 #' @param subsample Optional. Specify how many fixes to keep per time unit. You can use any positive integer and `"hour"` or `"day"` as the unit  (e.g.,`"1 per hour"` or `"2 per day"`).
 #' @param tz Timezone for timestamps. Default is "UTC".
+#' @param timestamp_format Optional. Explicit format string for parsing character
+#'   timestamps, passed to `as.POSIXct(..., format = )`. If `NULL`, `ez_track()`
+#'   tries a set of common datetime formats automatically.
 #' @param crs EPSG code or proj4string of the input CRS. Default is 4326 (WGS84).
 #' @param as_sf Logical. Return an `sf` object? Default is TRUE.
 #' @param id Optional. Column name for id.
-#' @param timestamp Optional. Column name timestamp.
+#' @param timestamp Optional. Column name for timestamp.
 #' @param x Optional. Column name for longitude.
 #' @param y Optional. Column name for latitude.
 #' @param keep_original_cols Logical. If FALSE, drops non-standard columns and only retains `id`, `timestamp`, `x`, and `y`. Default is TRUE.
@@ -29,6 +32,7 @@
 ez_track <- function(data,
                      format = NULL,
                      tz = "UTC",
+                     timestamp_format = NULL,
                      crs = 4326,
                      as_sf = TRUE,
                      id = NULL,
@@ -42,6 +46,105 @@ ez_track <- function(data,
 
   # Null coalescing helper
   `%||%` <- function(a, b) if (!is.null(a)) a else b
+
+  parse_timestamp_column <- function(x, tz = "UTC", timestamp_format = NULL) {
+    if (inherits(x, "POSIXct")) return(as.POSIXct(x, tz = tz))
+    if (inherits(x, "POSIXlt")) return(as.POSIXct(x, tz = tz))
+    if (inherits(x, "Date")) return(as.POSIXct(x, tz = tz))
+
+    if (is.numeric(x)) {
+      finite_x <- x[is.finite(x)]
+
+      # Handle Excel serial datetimes when they are within a plausible range.
+      if (length(finite_x) > 0 && all(finite_x > 20000 & finite_x < 80000)) {
+        return(as.POSIXct((x - 25569) * 86400, origin = "1970-01-01", tz = tz))
+      }
+
+      stop(
+        "Numeric timestamps are not supported unless they are Excel serial dates. ",
+        "Convert them before calling `ez_track()` or provide a parsed datetime column."
+      )
+    }
+
+    x <- as.character(x)
+    x <- trimws(x)
+    x[x == ""] <- NA_character_
+
+    parse_with_formats <- function(values, formats) {
+      parsed <- as.POSIXct(rep(NA_real_, length(values)), origin = "1970-01-01", tz = tz)
+
+      for (fmt in formats) {
+        needs_parse <- !is.na(values) & is.na(parsed)
+        if (!any(needs_parse)) break
+
+        attempt <- as.POSIXct(strptime(values[needs_parse], format = fmt, tz = tz))
+        matched_idx <- which(needs_parse)[!is.na(attempt)]
+        parsed[matched_idx] <- attempt[!is.na(attempt)]
+      }
+
+      parsed
+    }
+
+    if (!is.null(timestamp_format)) {
+      parsed <- as.POSIXct(strptime(x, format = timestamp_format, tz = tz))
+
+      if (all(is.na(parsed[!is.na(x)]))) {
+        stop("Failed to parse `timestamp` using `timestamp_format = \"", timestamp_format, "\"`.")
+      }
+
+      return(parsed)
+    }
+
+    common_formats <- c(
+      "%Y-%m-%d %H:%M:%OS",
+      "%Y/%m/%d %H:%M:%OS",
+      "%Y-%m-%d %H:%M",
+      "%Y/%m/%d %H:%M",
+      "%Y-%m-%dT%H:%M:%OS",
+      "%Y-%m-%dT%H:%M",
+      "%Y-%m-%dT%H:%M:%OSZ",
+      "%Y-%m-%dT%H:%M:%OS%z",
+      "%Y-%m-%d %H:%M:%OS%z",
+      "%m/%d/%Y %H:%M:%OS",
+      "%d/%m/%Y %H:%M:%OS",
+      "%m/%d/%Y %H:%M",
+      "%d/%m/%Y %H:%M",
+      "%Y-%m-%d",
+      "%Y/%m/%d",
+      "%m/%d/%Y",
+      "%d/%m/%Y",
+      "%d-%m-%Y %H:%M:%OS",
+      "%d-%m-%Y %H:%M",
+      "%d-%m-%Y",
+      "%Y%m%d %H%M%S",
+      "%Y%m%d"
+    )
+
+    ambiguous_values <- x[!is.na(x) & grepl("^\\d{1,2}/\\d{1,2}/\\d{4}( \\d{1,2}:\\d{2}(:\\d{2}(\\.\\d+)?)?)?$", x)]
+    if (length(ambiguous_values) > 0) {
+      mdy <- parse_with_formats(ambiguous_values, c("%m/%d/%Y %H:%M:%OS", "%m/%d/%Y %H:%M", "%m/%d/%Y"))
+      dmy <- parse_with_formats(ambiguous_values, c("%d/%m/%Y %H:%M:%OS", "%d/%m/%Y %H:%M", "%d/%m/%Y"))
+
+      same_clock <- !is.na(mdy) & !is.na(dmy) & unclass(mdy) != unclass(dmy)
+      if (any(same_clock)) {
+        warning(
+          "Some timestamps are ambiguous between month/day/year and day/month/year. ",
+          "Set `timestamp_format` explicitly to avoid mis-parsing."
+        )
+      }
+    }
+
+    parsed <- parse_with_formats(x, common_formats)
+
+    if (all(is.na(parsed[!is.na(x)]))) {
+      stop(
+        "Failed to parse `timestamp`. ",
+        "Set `timestamp_format` explicitly if your timestamps use a non-standard format."
+      )
+    }
+
+    parsed
+  }
 
   # Load tracking data depending on input type
   load_tracking_data <- function(data, format = NULL, ..., verbose = TRUE) {
@@ -131,8 +234,12 @@ ez_track <- function(data,
   names(df)[names(df) == x]         <- "x"
   names(df)[names(df) == y]         <- "y"
 
-  # Convert timestamp to POSIXct with specified timezone
-  df$timestamp <- as.POSIXct(df$timestamp, tz = tz)
+  # Parse timestamp values more defensibly than base auto-conversion alone.
+  df$timestamp <- parse_timestamp_column(
+    df$timestamp,
+    tz = tz,
+    timestamp_format = timestamp_format
+  )
 
   # Remove rows with missing values or duplicate (id, timestamp) combinations
   n_before <- nrow(df)
