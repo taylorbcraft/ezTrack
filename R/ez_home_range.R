@@ -88,19 +88,57 @@ ez_home_range <- function(data,
 
   # ---- KDE Method ----
   if (method == "kde") {
-    # Assemble args for kernelUD
-    kernel_args <- list(
-      x = sp_points,
-      h = h,
-      same4all = population,
-      extent = kde_extent
-    )
-    if (!is.null(hlim)) {
-      kernel_args$hlim <- hlim
+    is_small_grid_error <- function(err) {
+      grepl("grid is too small", conditionMessage(err), ignore.case = TRUE)
     }
 
-    kde_ud <- do.call(adehabitatHR::kernelUD, kernel_args)
-    kde_result <- adehabitatHR::getverticeshr(kde_ud, percent = level)
+    extent_candidates <- unique(c(
+      kde_extent,
+      kde_extent * 1.25,
+      kde_extent * 1.5,
+      kde_extent * 2,
+      kde_extent * 3,
+      kde_extent * 5
+    ))
+    extent_candidates <- extent_candidates[extent_candidates > 0]
+
+    kde_result <- NULL
+    last_error <- NULL
+
+    for (current_extent in extent_candidates) {
+      kernel_args <- list(
+        x = sp_points,
+        h = h,
+        same4all = population,
+        extent = current_extent
+      )
+      if (!is.null(hlim)) {
+        kernel_args$hlim <- hlim
+      }
+
+      kde_attempt <- tryCatch({
+        kde_ud <- do.call(adehabitatHR::kernelUD, kernel_args)
+        adehabitatHR::getverticeshr(kde_ud, percent = level)
+      }, error = function(e) e)
+
+      if (!inherits(kde_attempt, "error")) {
+        kde_result <- kde_attempt
+        break
+      }
+
+      last_error <- kde_attempt
+      if (!is_small_grid_error(kde_attempt)) {
+        stop(kde_attempt)
+      }
+    }
+
+    if (is.null(kde_result)) {
+      stop(
+        "KDE home range failed because the grid remained too small even after retrying larger extents. ",
+        "Try increasing `kde_extent` manually."
+      )
+    }
+
     kde_sf <- sf::st_as_sf(kde_result)
     names(kde_sf)[1] <- "id"
     return(sf::st_transform(kde_sf, 4326))

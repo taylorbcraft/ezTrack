@@ -12,7 +12,7 @@ License: MIT + file LICENSE
 URL: https://github.com/taylorbcraft/ezTrack
 BugReports: https://github.com/taylorbcraft/ezTrack/issues
 Depends: 
-    R (>= 3.6.0)
+    R (>= 4.1.0)
 Imports:
     adehabitatHR,
     dplyr,
