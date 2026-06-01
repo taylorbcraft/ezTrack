@@ -20,6 +20,6 @@ test_that("ez_home_range supports KDE method", {
 test_that("ez_home_range filters dates", {
   data(godwit_tracks)
   tracked <- ez_track(godwit_tracks)
-  range <- ez_home_range(tracked, startDate = "2025-01-01", endDate = "2025-03-01")
+  range <- ez_home_range(tracked, start_date = "2025-01-01", end_date = "2025-03-01")
   expect_s3_class(range, "sf")
 })

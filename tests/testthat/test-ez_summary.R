@@ -12,7 +12,7 @@ test_that("ez_summary returns expected columns", {
 test_that("ez_summary filters dates correctly", {
   data(godwit_tracks)
   tracked <- ez_track(godwit_tracks)
-  summary <- ez_summary(tracked, startDate = "2025-01-01", endDate = "2025-02-01")
+  summary <- ez_summary(tracked, start_date = "2025-01-01", end_date = "2025-02-01")
   expect_s3_class(summary, "data.frame")
 })
 

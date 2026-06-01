@@ -71,9 +71,25 @@ ez_map <- function(tracks = NULL,
   }
 
   if (!is.null(tracks)) {
-    if (!inherits(tracks, "sf") && !all(c("id", "x", "y", "timestamp") %in% names(tracks))) {
+    if (inherits(tracks, "sf")) {
+      if (!all(c("id", "timestamp") %in% names(tracks))) {
+        stop("`tracks` must include `id` and `timestamp` columns.")
+      }
+
+      geom_type <- unique(as.character(sf::st_geometry_type(tracks)))
+      if (!all(geom_type %in% c("POINT", "MULTIPOINT"))) {
+        stop("`tracks` must contain point geometries when provided as an sf object.")
+      }
+
+      if (!all(c("x", "y") %in% names(tracks))) {
+        coords <- sf::st_coordinates(tracks)
+        tracks$x <- coords[, 1]
+        tracks$y <- coords[, 2]
+      }
+    } else if (!all(c("id", "x", "y", "timestamp") %in% names(tracks))) {
       stop("`tracks` must be a data frame or sf with columns: id, x, y, timestamp")
     }
+
     if (!is.null(start_date)) {
       if (inherits(start_date, "character")) start_date <- as.Date(start_date)
       tracks <- tracks[tracks$timestamp >= as.POSIXct(start_date), ]
