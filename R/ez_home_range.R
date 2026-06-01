@@ -93,50 +93,79 @@ ez_home_range <- function(data,
     }
 
     extent_candidates <- unique(c(
+      1, 1.25, 1.5, 2, 3, 5, 10, 25, 50, 100,
+      kde_extent / 100,
+      kde_extent / 10,
+      kde_extent / 2,
       kde_extent,
       kde_extent * 1.25,
       kde_extent * 1.5,
-      kde_extent * 2,
-      kde_extent * 3,
-      kde_extent * 5
+      kde_extent * 2
     ))
-    extent_candidates <- extent_candidates[extent_candidates > 0]
+    extent_candidates <- sort(extent_candidates[is.finite(extent_candidates) & extent_candidates > 0])
 
-    kde_result <- NULL
-    last_error <- NULL
+    run_kde_for_sp <- function(sp_obj, same4all = FALSE) {
+      kde_result <- NULL
 
-    for (current_extent in extent_candidates) {
-      kernel_args <- list(
-        x = sp_points,
-        h = h,
-        same4all = population,
-        extent = current_extent
-      )
-      if (!is.null(hlim)) {
-        kernel_args$hlim <- hlim
+      for (current_extent in extent_candidates) {
+        kernel_args <- list(
+          x = sp_obj,
+          h = h,
+          same4all = same4all,
+          extent = current_extent
+        )
+        if (!is.null(hlim)) {
+          kernel_args$hlim <- hlim
+        }
+
+        kde_attempt <- tryCatch({
+          kde_ud <- do.call(adehabitatHR::kernelUD, kernel_args)
+          adehabitatHR::getverticeshr(kde_ud, percent = level)
+        }, error = function(e) e)
+
+        if (!inherits(kde_attempt, "error")) {
+          kde_result <- kde_attempt
+          break
+        }
+
+        if (!is_small_grid_error(kde_attempt)) {
+          stop(kde_attempt)
+        }
       }
 
-      kde_attempt <- tryCatch({
-        kde_ud <- do.call(adehabitatHR::kernelUD, kernel_args)
-        adehabitatHR::getverticeshr(kde_ud, percent = level)
-      }, error = function(e) e)
-
-      if (!inherits(kde_attempt, "error")) {
-        kde_result <- kde_attempt
-        break
-      }
-
-      last_error <- kde_attempt
-      if (!is_small_grid_error(kde_attempt)) {
-        stop(kde_attempt)
-      }
+      kde_result
     }
 
-    if (is.null(kde_result)) {
-      stop(
-        "KDE home range failed because the grid remained too small even after retrying larger extents. ",
-        "Try increasing `kde_extent` manually."
-      )
+    if (population) {
+      kde_result <- run_kde_for_sp(sp_points, same4all = TRUE)
+
+      if (is.null(kde_result)) {
+        stop(
+          "KDE home range failed because the grid remained too small even after retrying multiple extents. ",
+          "Try increasing `kde_extent` manually."
+        )
+      }
+    } else {
+      split_idx <- split(seq_len(nrow(sp_points@data)), sp_points@data$id)
+      kde_parts <- lapply(names(split_idx), function(id_value) {
+        sp_sub <- sp_points[split_idx[[id_value]], ]
+        kde_part <- run_kde_for_sp(sp_sub, same4all = FALSE)
+
+        if (is.null(kde_part)) {
+          stop(
+            "KDE home range failed for individual `", id_value,
+            "` even after retrying multiple extents. ",
+            "Try increasing `kde_extent` manually or inspect this track."
+          )
+        }
+
+        kde_sf_part <- sf::st_as_sf(kde_part)
+        names(kde_sf_part)[1] <- "id"
+        kde_sf_part
+      })
+
+      kde_sf <- do.call(rbind, kde_parts)
+      return(sf::st_transform(kde_sf, 4326))
     }
 
     kde_sf <- sf::st_as_sf(kde_result)
