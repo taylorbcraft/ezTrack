@@ -4,7 +4,13 @@
 \alias{ez_summary}
 \title{Summarize Animal Tracking Data}
 \usage{
-ez_summary(data, start_date = NULL, end_date = NULL, report = FALSE)
+ez_summary(
+  data,
+  start_date = NULL,
+  end_date = NULL,
+  report = FALSE,
+  open_report = interactive()
+)
 }
 \arguments{
 \item{data}{A data frame or sf object with columns `id`, `timestamp`, `x`, and `y`.}
@@ -13,10 +19,15 @@ ez_summary(data, start_date = NULL, end_date = NULL, report = FALSE)
 
 \item{end_date}{Optional. A `Date` object or string (e.g., "2021-01-15"). Filters out data after this date.}
 
-\item{report}{Logical. If TRUE, opens an HTML summary table in your browser for easy copying into slides or documents.}
+\item{report}{Logical. If `TRUE`, writes an HTML summary table to a temporary file.}
+
+\item{open_report}{Logical. If `TRUE` and `report = TRUE`, opens the HTML report in
+a browser. Defaults to `interactive()`.}
 }
 \value{
-A data frame with summary statistics per `id`, or an HTML table if `report = TRUE`.
+A data frame with summary statistics per `id`. When `report = TRUE`, the
+  data frame is returned invisibly and includes a `report_path` attribute pointing
+  to the generated HTML file.
 }
 \description{
 Calculate basic summary statistics per tracked individual. This function is useful

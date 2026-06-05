@@ -44,9 +44,6 @@ ez_track <- function(data,
                      verbose = TRUE,
                      ...) {
 
-  # Null coalescing helper
-  `%||%` <- function(a, b) if (!is.null(a)) a else b
-
   parse_timestamp_column <- function(x, tz = "UTC", timestamp_format = NULL) {
     if (inherits(x, "POSIXct")) return(as.POSIXct(x, tz = tz))
     if (inherits(x, "POSIXlt")) return(as.POSIXct(x, tz = tz))

@@ -118,7 +118,7 @@ ez_latitude_plot(trk)
 ## Dependencies
 - `sf`, `leaflet`, `geosphere`, `adehabitatHR`: spatial operations, mapping, and home range analysis  
 - `readxl`: Excel import support  
-- `knitr`, `kableExtra`, `htmltools`: HTML reporting  
+- `knitr`, `htmltools`: HTML reporting  
 - `ggplot2`, `viridisLite`: plotting with color palettes  
 - `magrittr`: for `%>%` pipe in mapping function  
 
@@ -127,7 +127,7 @@ Install missing packages using:
 ```r
 install.packages(c(
   "sf", "leaflet", "geosphere", "adehabitatHR", "readxl",
-  "knitr", "kableExtra", "htmltools", "ggplot2", "viridisLite", "magrittr", "dplyr"
+  "knitr", "htmltools", "ggplot2", "viridisLite", "magrittr", "dplyr"
 ))
 ```
 
@@ -140,4 +140,3 @@ MIT License © 2025 [Taylor Craft](https://github.com/taylorbcraft)
 
 ## Contributing / Issues
 Feel free to open an [issue](https://github.com/taylorbcraft/ezTrack/issues) or submit a pull request. Suggestions welcome!
-

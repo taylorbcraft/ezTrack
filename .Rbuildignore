@@ -1,8 +1,15 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^docs$
+^doc$
+^Meta$
 ^\.github$
 ^_pkgdown\.yml$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^LICENSE\.md$
+^manual_workflow$
+^case_study\.R$
+(^|/)\.DS_Store$
+^Rplots\.pdf$
+^figure$

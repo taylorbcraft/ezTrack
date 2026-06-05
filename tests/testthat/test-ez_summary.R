@@ -19,5 +19,9 @@ test_that("ez_summary filters dates correctly", {
 test_that("ez_summary HTML report runs", {
   data(godwit_tracks)
   tracked <- ez_track(godwit_tracks)
-  expect_invisible(ez_summary(tracked, report = TRUE))
+  report <- withVisible(ez_summary(tracked, report = TRUE, open_report = FALSE))
+
+  expect_false(report$visible)
+  expect_s3_class(report$value, "data.frame")
+  expect_true(file.exists(attr(report$value, "report_path")))
 })

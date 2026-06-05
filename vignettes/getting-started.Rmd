@@ -41,14 +41,14 @@ If automatic column guessing fails or guesses incorrectly, you can manually spec
 ```{r}
 tracks_manual <- ez_track(
   data = godwit_tracks,
-  id_col = 'individual.local.identifier',
-  time_col = 'timestamp',
-  x_col = 'location.long',
-  y_col = 'location.lat',
+  id = "individual.local.identifier",
+  timestamp = "timestamp",
+  x = "location.long",
+  y = "location.lat"
 )
 ```
 
-You can also subsample the dataset using the `subsample()` argument, which limits the number of location fixes per time unit. Use a simple string format such as "1 per hour" or "2 per day" to control the sampling frequency.
+You can also subsample the dataset using the `subsample` argument, which limits the number of location fixes per time unit. Use a simple string format such as "1 per hour" or "2 per day" to control the sampling frequency.
 
 ```{r}
 tracks_subsampled <- ez_track(
@@ -173,4 +173,3 @@ ez_map(tracks, home_ranges = home_ranges_mcp, start_date = '2025-04-12')
 ## Developer notes
 To update vignette pkgdown site:
 pkgdown::build_site()
-

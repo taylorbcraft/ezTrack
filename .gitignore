@@ -4,6 +4,9 @@
 .httr-oauth
 .DS_Store
 .quarto
+Rplots.pdf
+figure/
+ezTrack_*.tar.gz
 inst/doc
 /Meta/
 case_study.R
